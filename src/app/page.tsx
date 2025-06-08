@@ -154,7 +154,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex-1 text-sm sm:text-base">
               <p className="font-bold mb-1">免责声明</p>
-              <p>本网站为个人设计作品展示，与中国证券监督管理委员会（以下简称"证监会"）无任何关联。本网站所展示的内容、设计元素及标识仅用于展示目的，不代表证监会的官方立场或观点。本网站不提供任何证券监管、投资建议或金融服务。未经本人授权，任何人不得使用本网站内容进行商业用途或误导公众。</p>
+              <p>本网站为个人设计作品展示，与中国证券监督管理委员会（以下简称证监会）无任何关联。本网站所展示的内容、设计元素及标识仅用于展示目的，不代表证监会的官方立场或观点。本网站不提供任何证券监管、投资建议或金融服务。未经本人授权，任何人不得使用本网站内容进行商业用途或误导公众。</p>
             </div>
             <button 
               onClick={() => setShowDisclaimer(false)}
@@ -474,21 +474,20 @@ export default function Home() {
                     <div className="border-r border-b border-gray-300 flex flex-col">
             {/* Panel 5 content */}
             {/* Building photo matching first row panel height */}
-            <img 
-              src="/panel5.png" 
-              alt="Panel 5" 
-              className="w-full object-cover"
-              style={{ height: 'calc(100% / 1.4)' }}
-            />
+            <div className="relative" style={{ height: 'calc(100% / 1.4)' }}>
+              <Image 
+                src="/panel5.png" 
+                alt="Panel 5" 
+                fill
+                className="object-cover"
+              />
+            </div>
             
             {/* Content area with padding */}
             <div className="flex-1 flex flex-col relative p-4">
               <div>
                 {/* Subheader */}
-                <p 
-                  className="text-sm sm:text-base text-gray-600 mb-2 leading-tight"
-                  style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
-                >
+                <p className="text-sm sm:text-base text-gray-600 mb-2 leading-tight">
                   &ldquo;中国经济持续展现强劲韧性&rdquo;
                 </p>
                 
@@ -512,22 +511,21 @@ export default function Home() {
           </div>
           <div className="border-r border-b border-gray-300 flex flex-col">
             {/* Panel 6 content */}
-            {/* Pipes photo matching first row panel height */}
-            <img 
-              src="/panel6.png" 
-              alt="Panel 6" 
-              className="w-full object-cover"
-              style={{ height: 'calc(100% / 1.4)' }}
-            />
+            {/* Building photo matching first row panel height */}
+            <div className="relative" style={{ height: 'calc(100% / 1.4)' }}>
+              <Image 
+                src="/panel6.png" 
+                alt="Panel 6" 
+                fill
+                className="object-cover"
+              />
+            </div>
             
             {/* Content area with padding */}
             <div className="flex-1 flex flex-col relative p-4">
               <div>
                 {/* Title (smaller text) */}
-                <p 
-                  className="text-sm sm:text-base text-gray-600 mb-2 leading-tight"
-                  style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
-                >
+                <p className="text-sm sm:text-base text-gray-600 mb-2 leading-tight">
                   关于完善中国特色现代企业制度的意见
                 </p>
                 
@@ -551,16 +549,20 @@ export default function Home() {
             </div>
             <div className="border-r border-gray-300 p-4">
             {/* Panel 7 content */}
+            <div className="relative h-full">
+            </div>
           </div>
           <div className="border-b border-gray-300 flex flex-col">
             {/* Panel 8 content */}
             {/* Panel 8 photo matching first row panel height */}
-            <img 
-              src="/panel8.png" 
-              alt="Panel 8" 
-              className="w-full object-cover"
-              style={{ height: 'calc(100% / 1.4)' }}
-            />
+            <div className="relative" style={{ height: 'calc(100% / 1.4)' }}>
+              <Image 
+                src="/panel8.png" 
+                alt="Panel 8" 
+                fill
+                className="object-cover"
+              />
+            </div>
             
             {/* Content area with padding */}
             <div className="flex-1 flex flex-col relative p-4">
@@ -618,7 +620,7 @@ export default function Home() {
               className="text-base sm:text-lg leading-relaxed mb-4 text-gray-800"
               style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
             >
-              中国证券监督管理委员会是国务院直属正部级机构，全面负责我国证券、期货市场的统一监督管理。自成立以来，证监会始终坚持依法从严监管，围绕"建制度、不干预、零容忍"的监管主线，持续推进资本市场改革，完善发行上市、并购重组、信息披露、交易监管、退市制度等关键环节的制度建设。通过压实中介机构"看门人"责任、强化对违法违规行为的打击、加强对中小投资者的权益保护，证监会不断提升市场透明度与公信力，维护市场公平秩序，坚定市场信心。
+              中国证券监督管理委员会是国务院直属正部级机构，全面负责我国证券、期货市场的统一监督管理。自成立以来，证监会始终坚持依法从严监管，围绕&ldquo;建制度、不干预、零容忍&rdquo;的监管主线，持续推进资本市场改革，完善发行上市、并购重组、信息披露、交易监管、退市制度等关键环节的制度建设。通过压实中介机构&ldquo;看门人&rdquo;责任、强化对违法违规行为的打击、加强对中小投资者的权益保护，证监会不断提升市场透明度与公信力，维护市场公平秩序，坚定市场信心。
             </p>
             <p 
               className="text-base sm:text-lg leading-relaxed text-gray-800"
