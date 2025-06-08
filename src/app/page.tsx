@@ -8,7 +8,16 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 // Constants
-const NAV_ITEMS = ['首页', '机构概况', '新闻发布', '政务信息', '办事服务', '互动交流', '统计信息', '专题专栏'];
+const NAV_ITEMS = [
+  { text: '首页', link: 'http://www.csrc.gov.cn/csrc/index.shtml' },
+  { text: '机构概况', link: 'http://www.csrc.gov.cn/csrc/jggk/index.shtml' },
+  { text: '新闻发布', link: 'http://www.csrc.gov.cn/csrc/xwfb/index.shtml' },
+  { text: '政务信息', link: 'http://www.csrc.gov.cn/csrc/zwxx/index.shtml' },
+  { text: '办事服务', link: 'http://www.csrc.gov.cn/csrc/bsfw/index.shtml' },
+  { text: '互动交流', link: 'http://www.csrc.gov.cn/csrc/hdjl/index.shtml' },
+  { text: '统计信息', link: 'http://www.csrc.gov.cn/csrc/tjsj/index.shtml' },
+  { text: '专题专栏', link: 'http://www.csrc.gov.cn/csrc/ztzl/index.shtml' }
+];
 const LANGUAGES = [
   'ENGLISH', '繁體中文', 'PORTUGUÊS (BRASIL)', 'POLSKI', '한국어', '日本語',
   'ITALIANO', 'FRANÇAIS', 'ESPAÑOL (MÉXICO)', 'ESPAÑOL', 'DEUTSCH', 'РУССКИЙ'
@@ -25,7 +34,7 @@ const NavItem = ({
   showArrow = true,
   onClick
 }: {
-  item: string;
+  item: { text: string; link: string };
   isHome?: boolean;
   className?: string;
   textSize?: string;
@@ -42,16 +51,19 @@ const NavItem = ({
 
   return (
     <div className={`cursor-pointer flex items-center ${className}`} style={{ fontFamily: FONT_FAMILY }} onClick={onClick}>
-      <span 
+      <a 
+        href={item.link}
+        target={isHome ? undefined : "_blank"}
+        rel={isHome ? undefined : "noopener noreferrer"}
         className={`text-white hover:text-black px-1 sm:px-2 py-1 transition-colors ${textSize}`}
         style={{ transition: 'all 0.2s ease' }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         {isHome && <span>[ ● ] </span>}
-        {item}
+        {item.text}
         {!isHome && showArrow && <span className="ml-1 sm:ml-2">[ ↗ ]</span>}
-      </span>
+      </a>
     </div>
   );
 };
@@ -65,19 +77,32 @@ const LanguageDropdown = ({
   onToggle: () => void;
   isMobile?: boolean;
 }) => {
-  const handleLanguageHover = (e: React.MouseEvent<HTMLElement>, isEnter: boolean) => {
+  const [hoveredLanguage, setHoveredLanguage] = useState<string | null>(null);
+
+  const handleLanguageHover = (e: React.MouseEvent<HTMLElement>, isEnter: boolean, language: string) => {
     const element = e.target as HTMLElement;
     if (isEnter) {
       element.style.color = BRAND_COLOR;
       element.style.borderBottomColor = BRAND_COLOR;
+      if (language !== 'ENGLISH') {
+        setHoveredLanguage(language);
+      }
     } else {
       element.style.color = 'white';
       element.style.borderBottomColor = 'white';
+      setHoveredLanguage(null);
     }
   };
 
   const displayLanguages = isMobile ? LANGUAGES.slice(0, 6) : LANGUAGES;
   const dropdownClasses = isMobile ? 'absolute right-0 min-w-32 text-xs' : 'absolute left-0 min-w-48 text-sm';
+
+  const handleLanguageClick = (language: string) => {
+    if (language === 'ENGLISH') {
+      window.open('http://www.csrc.gov.cn/csrc_en/index.shtml', '_blank');
+    }
+    onToggle();
+  };
 
   return (
     <div className="relative">
@@ -108,13 +133,21 @@ const LanguageDropdown = ({
           {displayLanguages.map((language, index) => (
             <div
               key={index}
-              className={`${isMobile ? 'px-3 py-2' : 'px-4 py-2'} cursor-pointer transition-colors border-b border-white last:border-b-0`}
+              className={`${isMobile ? 'px-3 py-2' : 'px-4 py-2'} cursor-pointer transition-colors border-b border-white last:border-b-0 relative`}
               style={{ transition: 'all 0.2s ease' }}
-              onMouseEnter={(e) => handleLanguageHover(e, true)}
-              onMouseLeave={(e) => handleLanguageHover(e, false)}
-              onClick={onToggle}
+              onMouseEnter={(e) => handleLanguageHover(e, true, language)}
+              onMouseLeave={(e) => handleLanguageHover(e, false, language)}
+              onClick={() => handleLanguageClick(language)}
             >
               {language}
+              {hoveredLanguage === language && language !== 'ENGLISH' && (
+                <div 
+                  className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-black text-white px-3 py-1 text-xs whitespace-nowrap border border-white"
+                  style={{ fontFamily: FONT_FAMILY }}
+                >
+                  暂不支持此语言
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -150,7 +183,7 @@ export default function Home() {
     <div className="flex flex-col">
       {/* Disclaimer Banner */}
       {showDisclaimer && (
-        <div className="fixed top-0 left-0 right-0 bg-black/95 text-white z-[100] p-4 border-b border-red-500">
+        <div className="fixed top-0 left-0 right-0 bg-black/95 text-white z-[100] p-4 border-b border-[#D00403]">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex-1 text-sm sm:text-base">
               <p className="font-bold mb-1">免责声明</p>
@@ -190,7 +223,7 @@ export default function Home() {
                 <NavItem 
                   key={index}
                   item={item}
-                  isHome={item === '首页'}
+                  isHome={item.text === '首页'}
                   className="px-1 sm:px-2 lg:px-3 py-4"
                 />
               ))}
@@ -206,7 +239,7 @@ export default function Home() {
                 <NavItem 
                   key={index}
                   item={item}
-                  isHome={item === '首页'}
+                  isHome={item.text === '首页'}
                   className="px-1 py-4"
                   textSize="text-xs"
                 />
@@ -219,7 +252,7 @@ export default function Home() {
               />
               
               <NavItem 
-                item={`更多 [ ${isMobileMenuOpen ? '↑' : '↓'} ]`}
+                item={{ text: `更多 [ ${isMobileMenuOpen ? '↑' : '↓'} ]`, link: '#' }}
                 className="px-1 py-4"
                 textSize="text-xs"
                 onClick={toggleMobileMenu}
@@ -233,9 +266,12 @@ export default function Home() {
                 style={{ fontFamily: FONT_FAMILY, top: '100%' }}
               >
                 {NAV_ITEMS.slice(2).map((item, index) => (
-                  <div
+                  <a
                     key={index}
-                    className="px-4 py-3 cursor-pointer transition-colors border-b border-white last:border-b-0"
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block px-4 py-3 cursor-pointer transition-colors border-b border-white last:border-b-0"
                     style={{ transition: 'all 0.2s ease' }}
                     onMouseEnter={(e) => {
                       const element = e.target as HTMLElement;
@@ -249,13 +285,13 @@ export default function Home() {
                     }}
                     onClick={toggleMobileMenu}
                   >
-                    {item} <span className="ml-2">[ ↗ ]</span>
-                  </div>
+                    {item.text} <span className="ml-2">[ ↗ ]</span>
+                  </a>
                 ))}
               </div>
             )}
           </div>
-
+          
           {/* Join Us Button */}
           <div 
             className="px-3 sm:px-4 lg:px-6 cursor-pointer flex items-center justify-center text-xs sm:text-sm font-bold text-black transition-colors w-40 sm:w-48 lg:w-56"
@@ -269,8 +305,9 @@ export default function Home() {
             }}
             onMouseEnter={(e) => handleJoinUsHover(e, true)}
             onMouseLeave={(e) => handleJoinUsHover(e, false)}
+            onClick={() => window.open('http://www.csrc.gov.cn/csrc/index.shtml', '_blank')}
           >
-            加入我们<span className="ml-2">[ ↗ ]</span>
+            转入官网<span className="ml-2">[ ↗ ]</span>
           </div>
         </div>
       </nav>
@@ -284,6 +321,8 @@ export default function Home() {
           muted 
           loop 
           playsInline
+          preload="auto"
+          poster="/section1-video-poster.png"
         >
           <source src="/frontpage_video.mp4" type="video/mp4" />
         </video>
@@ -295,7 +334,7 @@ export default function Home() {
         <div className="w-8 sm:w-12 lg:w-16 relative flex flex-col items-center justify-end pb-12 sm:pb-16 lg:pb-24 z-10" style={{ backgroundColor: BRAND_COLOR }}>
           {/* Strip Left Image */}
           <Image 
-            src="/strip-left.svg" 
+            src="/section1-leftbar.svg" 
             alt="Strip Left" 
             width={32}
             height={32}
@@ -359,26 +398,32 @@ export default function Home() {
             </p>
             
             {/* Button */}
-            <button 
-              className="inline-flex items-center text-sm sm:text-base font-bold text-white hover:text-red-500 bg-black border-2 border-black px-4 sm:px-6 py-2 sm:py-3 transition-all duration-200 self-start"
-              style={{ 
-                fontFamily: '"Noto Sans", Arial, sans-serif',
-                boxShadow: '0 0 0 0px rgba(239, 68, 68, 0)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 20px 8px rgba(239, 68, 68, 0.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 0 0px rgba(239, 68, 68, 0)';
-              }}
+            <a 
+              href="http://www.csrc.gov.cn/csrc/xwfb/index.shtml"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              查看全部要闻
-              <span className="ml-2">↗</span>
-            </button>
+              <button 
+                className="inline-flex items-center text-sm sm:text-base font-bold text-white hover:text-[#D00403] bg-black border-2 border-black px-4 sm:px-6 py-2 sm:py-3 transition-all duration-200 self-start"
+                style={{ 
+                  fontFamily: '"Noto Sans", Arial, sans-serif',
+                  boxShadow: '0 0 0 0px rgba(208, 4, 3, 0)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 20px 8px rgba(208, 4, 3, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 0 0px rgba(208, 4, 3, 0)';
+                }}
+              >
+                查看全部要闻
+                <span className="ml-2">↗</span>
+              </button>
+            </a>
           </div>
           
           {/* Top row - remaining 2 panels */}
-          <div className="border-r border-b border-gray-300 p-4 bg-red-600 flex flex-col justify-between items-start">
+          <div className="border-b border-gray-300 p-4 bg-[#D00403] flex flex-col justify-between items-start">
             {/* Panel 3 header image */}
             <Image 
               src="/sociallinks-headimage.svg" 
@@ -389,46 +434,66 @@ export default function Home() {
             />
             
             {/* Panel 3 content - Social Media Links */}
-            <div className="space-y-1">
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center">
-                  <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>[ </span>
-                  <FaWeixin className="w-3 h-3 text-black mx-1" />
-                  <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}> ]</span>
+            <div className="space-y-0.25">
+              <div className="flex items-center space-x-3 group relative">
+                <div className="flex items-center group-hover:bg-black group-hover:text-[#D00403] px-1 py-0.25 transition-all">
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>[ </span>
+                  <FaWeixin className="w-3 h-3 text-black group-hover:text-[#D00403] mx-1 transition-colors" />
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}> ]</span>
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] ml-2 transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>微信</span>
                 </div>
-                <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>微信</span>
+                <div className="absolute left-full ml-2 hidden group-hover:block">
+                  <div className="bg-black text-white text-xs px-2 py-1 border border-white whitespace-nowrap">
+                    暂不支持
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center">
-                  <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>[ </span>
-                  <AiFillWeiboSquare className="w-3 h-3 text-black mx-1" />
-                  <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}> ]</span>
-                </div>
-                <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>微博</span>
+              <div className="flex items-center space-x-3 group">
+                <a href="https://weibo.com/csrcfabu" target="_blank" rel="noopener noreferrer" className="flex items-center group-hover:bg-black group-hover:text-[#D00403] px-1 py-0.25 transition-all">
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>[ </span>
+                  <AiFillWeiboSquare className="w-3 h-3 text-black group-hover:text-[#D00403] mx-1 transition-colors" />
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}> ]</span>
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] ml-2 transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>微博</span>
+                </a>
               </div>
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center">
-                  <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>[ </span>
-                  <AiFillBilibili className="w-3 h-3 text-black mx-1" />
-                  <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}> ]</span>
+              <div className="flex items-center space-x-3 group relative">
+                <div className="flex items-center group-hover:bg-black group-hover:text-[#D00403] px-1 py-0.25 transition-all">
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>[ </span>
+                  <AiFillBilibili className="w-3 h-3 text-black group-hover:text-[#D00403] mx-1 transition-colors" />
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}> ]</span>
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] ml-2 transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>哔哩哔哩</span>
                 </div>
-                <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>哔哩哔哩</span>
+                <div className="absolute left-full ml-2 hidden group-hover:block">
+                  <div className="bg-black text-white text-xs px-2 py-1 border border-white whitespace-nowrap">
+                    暂不支持
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center">
-                  <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>[ </span>
-                  <AiFillTikTok className="w-3 h-3 text-black mx-1" />
-                  <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}> ]</span>
+              <div className="flex items-center space-x-3 group relative">
+                <div className="flex items-center group-hover:bg-black group-hover:text-[#D00403] px-1 py-0.25 transition-all">
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>[ </span>
+                  <AiFillTikTok className="w-3 h-3 text-black group-hover:text-[#D00403] mx-1 transition-colors" />
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}> ]</span>
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] ml-2 transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>抖音</span>
                 </div>
-                <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>抖音</span>
+                <div className="absolute left-full ml-2 hidden group-hover:block">
+                  <div className="bg-black text-white text-xs px-2 py-1 border border-white whitespace-nowrap">
+                    暂不支持
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center">
-                  <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>[ </span>
-                  <AiOutlineAlipayCircle className="w-3 h-3 text-black mx-1" />
-                  <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}> ]</span>
+              <div className="flex items-center space-x-3 group relative">
+                <div className="flex items-center group-hover:bg-black group-hover:text-[#D00403] px-1 py-0.25 transition-all">
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>[ </span>
+                  <AiOutlineAlipayCircle className="w-3 h-3 text-black group-hover:text-[#D00403] mx-1 transition-colors" />
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}> ]</span>
+                  <span className="text-sm font-medium text-black group-hover:text-[#D00403] ml-2 transition-colors" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>支付宝</span>
                 </div>
-                <span className="text-sm font-medium text-black" style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}>支付宝</span>
+                <div className="absolute left-full ml-2 hidden group-hover:block">
+                  <div className="bg-black text-white text-xs px-2 py-1 border border-white whitespace-nowrap">
+                    暂不支持
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -437,7 +502,7 @@ export default function Home() {
             {/* Top right corner text */}
             <div className="absolute top-3 right-4">
               <span 
-                className="text-red-500 text-sm font-bold"
+                className="text-[#D00403] text-sm font-bold"
                 style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
               >
                 直达服务
@@ -447,10 +512,10 @@ export default function Home() {
             {/* Header with icon and title */}
             <div className="flex items-center mb-4 pt-3 px-4">
               <div className="w-6 h-6 mr-3 flex items-center justify-center">
-                <FaDoorOpen className="text-red-500 text-lg" />
+                <FaDoorOpen className="text-[#D00403] text-lg" />
               </div>
               <h3 
-                className="text-red-500 text-sm font-bold"
+                className="text-[#D00403] text-sm font-bold"
                 style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
               >
                 常用功能
@@ -466,12 +531,18 @@ export default function Home() {
             </p>
             
             {/* Quick entry button at exact bottom right corner */}
-            <button 
-              className="absolute bottom-0 right-0 bg-black text-red-500 border border-red-500 text-xs px-10 py-3 hover:bg-red-500 hover:text-black transition-colors flex items-center"
-              style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
+            <a 
+              href="https://neris.csrc.gov.cn/portal/portalHome/index"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              快速入口 <span className="ml-2">↗</span>
-            </button>
+              <button 
+                className="absolute bottom-0 right-0 bg-black text-[#D00403] border border-[#D00403] text-xs px-16 py-3.75 hover:bg-[#D00403] hover:text-black transition-colors flex items-center"
+                style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
+              >
+                快速入口 <span className="ml-2">↗</span>
+              </button>
+            </a>
           </div>
           
           {/* Bottom row - 4 panels */}
@@ -480,7 +551,7 @@ export default function Home() {
             {/* Building photo matching first row panel height */}
             <div className="relative" style={{ height: 'calc(100% / 1.4)' }}>
               <Image 
-                src="/panel5.png" 
+                src="/section2-2.png" 
                 alt="Panel 5" 
                 fill
                 className="object-cover"
@@ -504,13 +575,18 @@ export default function Home() {
                 </h3>
               </div>
               
-              {/* Black button in exact bottom right corner */}
-              <button 
-                className="absolute bottom-0 right-0 bg-black text-white text-sm px-10 py-3 hover:bg-gray-800 transition-colors flex items-center"
-                style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
+              <a 
+                href="https://www.peopleapp.com/column/30049242247-500006295158"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                查看更多 <span className="ml-2">↗</span>
-              </button>
+                <button 
+                  className="absolute bottom-0 right-0 bg-black text-white text-sm px-10 py-3 border-2 border-transparent hover:text-[#D00403] hover:border-[#D00403] transition-all flex items-center"
+                  style={{ fontFamily: '"Noto Sans", Arial, sans-serif', boxSizing: 'border-box' }}
+                >
+                  查看更多 <span className="ml-2">↗</span>
+                </button>
+              </a>
             </div>
           </div>
           <div className="border-r border-b border-gray-300 flex flex-col">
@@ -518,7 +594,7 @@ export default function Home() {
             {/* Building photo matching first row panel height */}
             <div className="relative" style={{ height: 'calc(100% / 1.4)' }}>
               <Image 
-                src="/panel6.png" 
+                src="/section2-1.png" 
                 alt="Panel 6" 
                 fill
                 className="object-cover"
@@ -542,16 +618,21 @@ export default function Home() {
                 </h3>
               </div>
               
-                              {/* Black button in exact bottom right corner */}
+              <a 
+                href="http://www.csrc.gov.cn/csrc/c100028/c7560525/content.shtml"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <button 
-                  className="absolute bottom-0 right-0 bg-black text-white text-sm px-10 py-3 hover:bg-gray-800 transition-colors flex items-center"
-                  style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
+                  className="absolute bottom-0 right-0 bg-black text-white text-sm px-10 py-3 border-2 border-transparent hover:text-[#D00403] hover:border-[#D00403] transition-all flex items-center"
+                  style={{ fontFamily: '"Noto Sans", Arial, sans-serif', boxSizing: 'border-box' }}
                 >
                   查看更多 <span className="ml-2">↗</span>
                 </button>
-              </div>
+              </a>
             </div>
-            <div className="border-r border-gray-300 p-4">
+          </div>
+          <div className="border-r border-gray-300 p-4">
             {/* Panel 7 content */}
             <div className="relative h-full">
             </div>
@@ -561,7 +642,7 @@ export default function Home() {
             {/* Panel 8 photo matching first row panel height */}
             <div className="relative" style={{ height: 'calc(100% / 1.4)' }}>
               <Image 
-                src="/panel8.png" 
+                src="/section2-3.png" 
                 alt="Panel 8" 
                 fill
                 className="object-cover"
@@ -588,13 +669,18 @@ export default function Home() {
                 </h3>
               </div>
               
-              {/* Black button in exact bottom right corner */}
-              <button 
-                className="absolute bottom-0 right-0 bg-black text-white text-sm px-10 py-3 hover:bg-gray-800 transition-colors flex items-center"
-                style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
+              <a 
+                href="http://www.csrc.gov.cn/csrc/c100029/c7473708/content.shtml"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                查看更多 <span className="ml-2">↗</span>
-              </button>
+                <button 
+                  className="absolute bottom-0 right-0 bg-black text-white text-sm px-10 py-3 border-2 border-transparent hover:text-[#D00403] hover:border-[#D00403] transition-all flex items-center"
+                  style={{ fontFamily: '"Noto Sans", Arial, sans-serif', boxSizing: 'border-box' }}
+                >
+                  查看更多 <span className="ml-2">↗</span>
+                </button>
+              </a>
             </div>
           </div>
         </div>
@@ -652,12 +738,20 @@ export default function Home() {
             >
               在这里，监管、法治与市场力量协同共进。中国证监会统筹发行审核、交易行为、信息披露与市场秩序，打击违法违规，压实&ldquo;关键少数&rdquo;责任，提升上市公司质量。通过持续制度创新与跨境协同，推动中国资本市场走向更加稳健、包容和国际化的未来。
             </p>
-            <button 
-              className="absolute bottom-0 right-0 bg-white text-black px-10 py-3 text-sm hover:bg-black hover:text-red-500 hover:border hover:border-red-500 transition-colors"
-              style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
-            >
-              进一步了解 ↗
-            </button>
+            <div className="flex justify-center mt-8">
+              <a 
+                href="http://www.csrc.gov.cn/csrc/jggk/index.shtml"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button 
+                  className="absolute bottom-0 right-0 bg-white text-black px-10 py-3 text-sm hover:bg-black hover:text-[#D00403] hover:border hover:border-[#D00403] transition-colors"
+                  style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
+                >
+                  进一步了解 <span className="ml-2">↗</span>
+                </button>
+              </a>
+            </div>
           </div>
         </div>
         <div className="pitchblock__image absolute top-0 right-0 w-1/2 h-full" style={{ backgroundImage: 'url(/section3_stage.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
@@ -676,26 +770,34 @@ export default function Home() {
             className="text-sm font-bold mb-2 px-6 pt-4"
             style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
           >
-            全品类监管覆盖
+            统计信息
           </h3>
           <h4 
             className="text-3xl font-semibold mb-3 px-6"
             style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
           >
-            证监会统一监管商品与金融衍生品市场
+            证券市场统计数据
           </h4>
           <p 
             className="text-sm leading-relaxed mb-4 px-6 text-gray-400"
             style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
           >
-            证监会依法对金属、能源、农产、金融等期货与期权市场实施全链条监管，保障市场规范运作，提升服务实体经济能力。通过完善品种上市制度与交易监管机制，推动衍生品市场稳健发展与功能发挥。
+            中国证监会定期发布证券市场快报和月报，披露交易所交易量、资金流动、品种结构等核心数据，确保监管透明性与及时响应。最近数据包括2025年5月26–30日的证交快报，以及2025年5月的月度统计。
           </p>
-          <button 
-            className="absolute bottom-0 right-0 bg-white text-black px-10 py-3 text-sm hover:bg-black hover:text-red-500 hover:border hover:border-red-500 transition-colors"
-            style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
-          >
-            了解更多 ↗
-          </button>
+          <div className="flex justify-center mt-8">
+            <a 
+              href="http://www.csrc.gov.cn/csrc/tjsj/index.shtml"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button 
+                className="absolute bottom-0 right-0 bg-white text-black px-10 py-3 text-sm hover:bg-black hover:text-[#D00403] hover:border hover:border-[#D00403] transition-colors"
+                style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
+              >
+                了解更多 <span className="ml-2">↗</span>
+              </button>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -711,9 +813,16 @@ export default function Home() {
                 证监会依托大数据、AI、RPA等技术手段，不断升级科技监管能力，打造&ldquo;业务在线、合规在线、监管在线&rdquo;的监管新生态。同时深化投资者教育，建设全国投资者教育基地，开展互动式教学与风险提示，增强公众理性投资意识。
               </p>
             </div>
-            <button className="bg-white text-black px-6 py-3 text-sm hover:bg-red-500 hover:text-white transition-colors flex items-center">
-              了解科案例与教育基地 <span className="ml-2">↗</span>
-            </button>
+            <div className="relative group inline-block">
+              <button className="bg-white text-black px-6 py-3 text-sm hover:bg-black hover:text-[#D00403] hover:border hover:border-[#D00403] transition-colors flex items-center">
+                了解案例 <span className="ml-2">↗</span>
+              </button>
+              <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 hidden group-hover:block">
+                <div className="bg-black text-white text-xs px-2 py-1 border border-white whitespace-nowrap">
+                  暂不支持
+                </div>
+              </div>
+            </div>
           </div>
           {/* Combined panels 3-4-7-8 */}
           <div className="col-span-2 row-span-2 flex items-center justify-center bg-black relative overflow-hidden">
@@ -766,14 +875,20 @@ export default function Home() {
               // Merge R3C1 to R5C3 into a single cell
               if (rowIdx === 2 && colIdx === 0) {
                 return (
-                  <div key={`r3c1-merged`} className="flex items-end justify-start row-span-3 col-span-3 bg-black h-full w-full">
-                    <Image 
-                      src="/actual_logo.png" 
-                      alt="CSRC Logo" 
-                      width={96}
-                      height={96}
-                      className="h-24 w-auto object-contain bg-white" 
-                    />
+                  <div key={`r3c1-merged`} className="flex items-end justify-start row-span-3 col-span-3 bg-black h-full w-full p-4">
+                    <div className="flex items-end pr-2">
+                      <Image 
+                        src="/china_logo.svg" 
+                        alt="China Logo" 
+                        width={48}
+                        height={48}
+                        className="h-14 w-auto" 
+                      />
+                      <div className="flex flex-col w-[280px] ml-2">
+                        <h1 className="text-xl font-bold text-white mb-2 text-center">中国证券监督管理委员会</h1>
+                        <h2 className="text-xs text-white text-center">CHINA SECURITIES REGULATORY COMMISSION</h2>
+                      </div>
+                    </div>
                   </div>
                 );
               }
@@ -787,8 +902,8 @@ export default function Home() {
               // Merge R2C2 to R2C3 into a single cell
               if (rowIdx === 1 && colIdx === 1) {
                 return (
-                  <div key={`r2c2-merged`} className="flex items-center justify-start col-span-2 bg-black border border-red-500 pl-4">
-                    <span className="text-red-500 text-lg font-medium">社交媒体</span>
+                  <div key={`r2c2-merged`} className="flex items-center justify-start col-span-2 bg-black border-[1.25px] border-[#D00403] pl-4">
+                    <span className="text-[#D00403] text-lg font-medium">社交媒体</span>
                   </div>
                 );
               }
@@ -799,27 +914,27 @@ export default function Home() {
               // R2C1 single cell, make border red and set text to (5), align left with padding
               if (rowIdx === 1 && colIdx === 0) {
                 return (
-                  <div key={`r2c1`} className="flex items-center justify-start bg-black border border-red-500 pl-4">
-                    <span className="text-red-500 text-lg font-medium">(5)</span>
+                  <div key={`r2c1`} className="flex items-center justify-start bg-black border-[1.25px] border-[#D00403] pl-4">
+                    <span className="text-[#D00403] text-lg font-medium">(5)</span>
                   </div>
                 );
               }
 
               let cellClass = 'flex items-center justify-center';
               if (rowIdx === 0 && colIdx < 6) {
-                cellClass += ' border-t border-white'; // Add top border to first 6 cells in row 1
+                cellClass += ' border-t border-white border-[1.25px]'; // Add top border to first 6 cells in row 1
               } else if (rowIdx === 1 && colIdx === 0) {
-                cellClass += ' border border-white'; // R2C1
+                cellClass += ' border-l border-b border-white border-[1.25px]'; // R2C1
               } else if (rowIdx === 1 && colIdx === 1) {
-                cellClass += ' border-t border-b border-l border-white'; // R2C2
+                cellClass += ' border-b border-l border-white border-[1.25px]'; // R2C2
               } else if (rowIdx === 1 && colIdx === 2) {
-                cellClass += ' border-t border-b border-r border-white'; // R2C3
+                cellClass += ' border-b border-r border-white border-[1.25px]'; // R2C3
               }
 
               // Borders for R3C4 to R4C6 block
               // Top row of block
               if (rowIdx === 2 && colIdx === 3) {
-                cellClass += ' border-t border-l border-white'; // Top-left
+                cellClass += ' border-t border-white'; // Top-left
               } else if (rowIdx === 2 && colIdx === 4) {
                 cellClass += ' border-t border-white'; // Top-middle
               } else if (rowIdx === 2 && colIdx === 5) {
@@ -827,7 +942,7 @@ export default function Home() {
               }
               // Bottom row of block
               if (rowIdx === 3 && colIdx === 3) {
-                cellClass += ' border-b border-l border-white'; // Bottom-left
+                cellClass += ' border-b border-white'; // Bottom-left
               } else if (rowIdx === 3 && colIdx === 4) {
                 cellClass += ' border-b border-white'; // Bottom-middle
               } else if (rowIdx === 3 && colIdx === 5) {
@@ -837,7 +952,7 @@ export default function Home() {
               // Merge R1C7 to R2C9 into a single cell
               if (rowIdx === 0 && colIdx === 6) {
                 return (
-                  <div key={`r1c7-merged`} className="flex items-start justify-start row-span-2 col-span-3 bg-black border border-white h-full w-full p-4">
+                  <div key={`r1c7-merged`} className="flex items-start justify-start row-span-2 col-span-3 bg-black border border-white border-[1.25px] h-full w-full p-4">
                     <span className="text-white text-base font-semibold leading-snug">
                     中国证监会致力于构建一个更加规范、透明、有韧性的资本市场。我们相信，健康的市场秩序源于严谨的监管，也来自每一位投资者对规则的信任。无论你是市场新手还是资深机构，清晰、可预期的制度环境，始终是我们努力的方向。
                     </span>
@@ -858,10 +973,10 @@ export default function Home() {
                   <div key={`r5c4`} className="flex items-center justify-center bg-black border-l border-b border-r border-white h-full w-full">
                     <Image 
                       src="/csrc_logo.svg" 
-                      alt="CFA Logo" 
-                      width={72}
-                      height={72}
-                      className="h-18 w-auto" 
+                      alt="CSRC Logo"
+                      width={48}
+                      height={48}
+                      className="h-12 w-auto" 
                     />
                   </div>
                 );
@@ -883,7 +998,7 @@ export default function Home() {
               // R5C7 single cell, fill with badge.png, centered
               if (rowIdx === 4 && colIdx === 6) {
                 return (
-                  <div key={`r5c7`} className="flex items-center justify-center bg-black border border-white h-full w-full">
+                  <div key={`r5c7`} className="flex items-center justify-center bg-black border border-white border-[1.25px] h-full w-full">
                     <Image 
                       src="/badge.png" 
                       alt="badge" 
@@ -898,8 +1013,8 @@ export default function Home() {
               // Merge R5C8 to R5C12 into a single cell, fill with provided text, left-aligned with padding
               if (rowIdx === 4 && colIdx === 7) {
                 return (
-                  <div key={`r5c8-merged`} className="flex items-center justify-center col-span-5 bg-black border border-white h-full w-full pl-4">
-                    <span className="text-white text-xs">京ICP备37182615号-1</span>
+                  <div key={`r5c8-merged`} className="flex items-center justify-center col-span-5 bg-black border border-white border-[1.25px] h-full w-full pl-4">
+                    <span className="text-white text-xs">京ICP备20010911号-1</span>
                     <Image 
                       src="/beian.png" 
                       alt="beian" 
@@ -907,7 +1022,7 @@ export default function Home() {
                       height={16}
                       className="h-4 w-auto mx-2 inline-block align-middle" 
                     />
-                    <span className="text-white text-xs">京公网安备 8921153702840 号</span>
+                    <span className="text-white text-xs">京公网安备 123456789000 号</span>
                   </div>
                 );
               }
@@ -919,31 +1034,47 @@ export default function Home() {
               // Merge R3C10 to R3C12 into a single cell, fill with list and up-right arrow icon
               if (rowIdx === 2 && colIdx === 9) {
                 return (
-                  <div key={`r3c10-merged`} className="flex flex-col items-start justify-center col-span-3 bg-black border border-white h-full w-full p-2">
+                  <div key={`r3c10-merged`} className="flex flex-col items-start justify-center col-span-3 bg-black border-t border-white border-[1.25px] h-full w-full p-2">
                     <ul className="grid grid-cols-2 gap-x-2 gap-y-2 w-full">
                       <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">上海证券交易所</span></span>
+                        <a href="https://www.sse.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
+                          [ <span className="mx-1">↗</span> ] <span className="ml-2">上海证券交易所</span>
+                        </a>
                       </li>
                       <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">深圳证券交易所</span></span>
+                        <a href="https://www.szse.cn/index/index.html" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
+                          [ <span className="mx-1">↗</span> ] <span className="ml-2">深圳证券交易所</span>
+                        </a>
                       </li>
                       <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">北京证券交易所</span></span>
+                        <a href="https://www.bse.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
+                          [ <span className="mx-1">↗</span> ] <span className="ml-2">北京证券交易所</span>
+                        </a>
                       </li>
                       <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">上海期货交易所</span></span>
+                        <a href="https://www.shfe.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
+                          [ <span className="mx-1">↗</span> ] <span className="ml-2">上海期货交易所</span>
+                        </a>
                       </li>
                       <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">郑州商品交易所</span></span>
+                        <a href="http://www.czce.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
+                          [ <span className="mx-1">↗</span> ] <span className="ml-2">郑州商品交易所</span>
+                        </a>
                       </li>
                       <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">大连商品交易所</span></span>
+                        <a href="http://www.dce.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
+                          [ <span className="mx-1">↗</span> ] <span className="ml-2">大连商品交易所</span>
+                        </a>
                       </li>
                       <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">中国金融期货交易所</span></span>
+                        <a href="http://www.cffex.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
+                          [ <span className="mx-1">↗</span> ] <span className="ml-2">中国金融期货交易所</span>
+                        </a>
                       </li>
                       <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">广州期货交易所</span></span>
+                        <a href="http://www.gfex.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
+                          [ <span className="mx-1">↗</span> ] <span className="ml-2">广州期货交易所</span>
+                        </a>
                       </li>
                     </ul>
                   </div>
@@ -954,22 +1085,22 @@ export default function Home() {
                 return null;
               }
 
-              // Merge R3C7 to R4C9 into a single cell, remove left border and add red strip pattern aligned to the right
+              // Merge R3C7 to R4C9 into a single cell, add 4 diagonal strips using BRAND_COLOR aligned to the right
               if (rowIdx === 2 && colIdx === 6) {
                 return (
                   <div
                     key={`r3c7-merged`}
-                    className="flex items-center justify-end row-span-2 col-span-3 bg-black border-t border-b border-r border-white h-full w-full relative"
+                    className="flex items-center justify-end row-span-2 col-span-3 bg-black h-full w-full relative"
                   >
                     <div
                       className="absolute right-0 top-0 h-full"
                       style={{
-                        width: '33.3333%',
-                        backgroundImage:
-                          'repeating-linear-gradient(135deg, #ef4444 0 20px, #000 20px 40px)',
+                        width: '96px',
+                        height: '100%',
+                        backgroundImage: `repeating-linear-gradient(135deg, ${BRAND_COLOR} 0 16px, transparent 8px 35px)`,
                         backgroundPosition: 'right',
-                        backgroundRepeat: 'repeat',
-                        backgroundSize: '60px 60px',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: '100px 100%'
                       }}
                     />
                   </div>
@@ -986,7 +1117,7 @@ export default function Home() {
               // Merge R1C10 to R2C12 into a single cell
               if (rowIdx === 0 && colIdx === 9) {
                 return (
-                  <div key={`r1c10-merged`} className="flex items-center justify-center row-span-2 col-span-3 bg-black border border-white">
+                  <div key={`r1c10-merged`} className="flex items-center justify-center row-span-2 col-span-3 bg-black border border-white border-[1.25px]">
                   </div>
                 );
               }
@@ -1001,33 +1132,33 @@ export default function Home() {
               // Merge R3C4 to R4C6 into a single cell
               if (rowIdx === 2 && colIdx === 3) {
                 return (
-                  <div key={`r3c4-merged`} className="flex flex-col items-start justify-center row-span-2 col-span-3 bg-black border border-red-500 p-2">
+                  <div key={`r3c4-merged`} className="flex flex-col items-start justify-center row-span-2 col-span-3 bg-black border-[1.25px] border-[#D00403] p-2">
                     <ul className="space-y-3">
-                      <li className="flex items-center text-red-500 text-lg font-medium">
+                      <li className="flex items-center text-[#D00403] text-lg font-medium">
                         <span className="mr-2">[</span>
                         <FaWeixin className="inline-block" />
                         <span className="ml-1 mr-2">]</span>
                         <span>微信</span>
                       </li>
-                      <li className="flex items-center text-red-500 text-lg font-medium">
+                      <li className="flex items-center text-[#D00403] text-lg font-medium">
                         <span className="mr-2">[</span>
                         <AiFillWeiboSquare className="inline-block" />
                         <span className="ml-1 mr-2">]</span>
                         <span>微博</span>
                       </li>
-                      <li className="flex items-center text-red-500 text-lg font-medium">
+                      <li className="flex items-center text-[#D00403] text-lg font-medium">
                         <span className="mr-2">[</span>
                         <AiFillBilibili className="inline-block" />
                         <span className="ml-1 mr-2">]</span>
                         <span>哔哩哔哩</span>
                       </li>
-                      <li className="flex items-center text-red-500 text-lg font-medium">
+                      <li className="flex items-center text-[#D00403] text-lg font-medium">
                         <span className="mr-2">[</span>
                         <AiFillTikTok className="inline-block" />
                         <span className="ml-1 mr-2">]</span>
                         <span>抖音</span>
                       </li>
-                      <li className="flex items-center text-red-500 text-lg font-medium">
+                      <li className="flex items-center text-[#D00403] text-lg font-medium">
                         <span className="mr-2">[</span>
                         <AiOutlineAlipayCircle className="inline-block" />
                         <span className="ml-1 mr-2">]</span>
