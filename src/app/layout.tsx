@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
   title: "中期协 | 主页",
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="zh-CN">
       <body className="antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   );
