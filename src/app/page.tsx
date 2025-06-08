@@ -5,6 +5,7 @@ import { AiFillWeiboSquare, AiFillBilibili, AiFillTikTok, AiOutlineAlipayCircle 
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
 import { FaDoorOpen } from 'react-icons/fa6';
 import { useState } from 'react';
+import Image from 'next/image';
 
 // Constants
 const NAV_ITEMS = ['首页', '机构概况', '新闻发布', '政务信息', '办事服务', '互动交流', '统计信息', '专题专栏'];
@@ -291,9 +292,11 @@ export default function Home() {
         {/* Red strip on the left */}
         <div className="w-8 sm:w-12 lg:w-16 relative flex flex-col items-center justify-end pb-12 sm:pb-16 lg:pb-24 z-10" style={{ backgroundColor: BRAND_COLOR }}>
           {/* Strip Left Image */}
-          <img 
+          <Image 
             src="/strip-left.svg" 
             alt="Strip Left" 
+            width={32}
+            height={32}
             className="w-auto h-auto px-2"
           />
         </div>
@@ -641,7 +644,7 @@ export default function Home() {
               className="text-sm leading-relaxed mb-4 px-6 text-gray-400"
               style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
             >
-              在这里，监管、法治与市场力量协同共进。中国证监会统筹发行审核、交易行为、信息披露与市场秩序，打击违法违规，压实"关键少数"责任，提升上市公司质量。通过持续制度创新与跨境协同，推动中国资本市场走向更加稳健、包容和国际化的未来。
+              在这里，监管、法治与市场力量协同共进。中国证监会统筹发行审核、交易行为、信息披露与市场秩序，打击违法违规，压实&ldquo;关键少数&rdquo;责任，提升上市公司质量。通过持续制度创新与跨境协同，推动中国资本市场走向更加稳健、包容和国际化的未来。
             </p>
             <button 
               className="absolute bottom-0 right-0 bg-white text-black px-10 py-3 text-sm hover:bg-black hover:text-red-500 hover:border hover:border-red-500 transition-colors"
@@ -656,10 +659,11 @@ export default function Home() {
 
       {/* Fourth Section - Animated Block */}
       <div className="animatedblock w-full aspect-[2/1] bg-gray-200 relative">
-        <img 
+        <Image 
           src="/section4.png" 
           alt="Section 4" 
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
         />
         <div className="animatedblock__text-box_item bg-black text-white pb-12 border border-white/20 w-1/4 h-1/3 absolute bottom-0 right-0">
           <h3 
@@ -707,18 +711,20 @@ export default function Home() {
           </div>
           {/* Combined panels 3-4-7-8 */}
           <div className="col-span-2 row-span-2 flex items-center justify-center bg-black relative overflow-hidden">
-            <img 
+            <Image 
               src="/section5_3.png" 
               alt="Section 5 Image 3" 
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
           {/* Panel 5 */}
           <div className="flex items-center justify-center bg-black relative overflow-hidden">
-            <img 
+            <Image 
               src="/section5_1.png" 
               alt="Section 5 Image 1" 
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
           {/* Panel 6 */}
@@ -729,10 +735,11 @@ export default function Home() {
           </div>
           {/* Panel 10 */}
           <div className="flex items-center justify-center bg-black relative overflow-hidden">
-            <img 
+            <Image 
               src="/section5_2.png" 
               alt="Section 5 Image 2" 
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
           {/* Panel 11 */}
@@ -754,7 +761,13 @@ export default function Home() {
               if (rowIdx === 2 && colIdx === 0) {
                 return (
                   <div key={`r3c1-merged`} className="flex items-end justify-start row-span-3 col-span-3 bg-black h-full w-full">
-                    <img src="/actual_logo.png" alt="CSRC Logo" className="h-24 w-auto object-contain bg-white" />
+                    <Image 
+                      src="/actual_logo.png" 
+                      alt="CSRC Logo" 
+                      width={96}
+                      height={96}
+                      className="h-24 w-auto object-contain bg-white" 
+                    />
                   </div>
                 );
               }
@@ -837,7 +850,13 @@ export default function Home() {
               if (rowIdx === 4 && colIdx === 3) {
                 return (
                   <div key={`r5c4`} className="flex items-center justify-center bg-black border-l border-b border-r border-white h-full w-full">
-                    <img src="/csrc_logo.svg" alt="CFA Logo" className="h-18 w-auto" />
+                    <Image 
+                      src="/csrc_logo.svg" 
+                      alt="CFA Logo" 
+                      width={72}
+                      height={72}
+                      className="h-18 w-auto" 
+                    />
                   </div>
                 );
               }
@@ -859,7 +878,13 @@ export default function Home() {
               if (rowIdx === 4 && colIdx === 6) {
                 return (
                   <div key={`r5c7`} className="flex items-center justify-center bg-black border border-white h-full w-full">
-                    <img src="/badge.png" alt="badge" className="h-20 w-auto" />
+                    <Image 
+                      src="/badge.png" 
+                      alt="badge" 
+                      width={80}
+                      height={80}
+                      className="h-20 w-auto" 
+                    />
                   </div>
                 );
               }
@@ -869,7 +894,13 @@ export default function Home() {
                 return (
                   <div key={`r5c8-merged`} className="flex items-center justify-center col-span-5 bg-black border border-white h-full w-full pl-4">
                     <span className="text-white text-xs">京ICP备37182615号-1</span>
-                    <img src="/beian.png" alt="beian" className="h-4 w-auto mx-2 inline-block align-middle" />
+                    <Image 
+                      src="/beian.png" 
+                      alt="beian" 
+                      width={16}
+                      height={16}
+                      className="h-4 w-auto mx-2 inline-block align-middle" 
+                    />
                     <span className="text-white text-xs">京公网安备 8921153702840 号</span>
                   </div>
                 );
