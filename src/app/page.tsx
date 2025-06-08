@@ -171,9 +171,11 @@ export default function Home() {
         {/* Red strip with logo */}
         <div className="w-12 sm:w-16 relative" style={{ backgroundColor: 'white' }}>
           <div className="absolute inset-0 flex items-center justify-center">
-            <img 
+            <Image 
               src="/csrc_logo.svg" 
               alt="CFA Logo" 
+              width={48}
+              height={48}
               className="w-6 h-6 sm:w-12 sm:h-12"
             />
           </div>
@@ -378,9 +380,11 @@ export default function Home() {
           {/* Top row - remaining 2 panels */}
           <div className="border-r border-b border-gray-300 p-4 bg-red-600 flex flex-col justify-between items-start">
             {/* Panel 3 header image */}
-            <img 
+            <Image 
               src="/sociallinks-headimage.svg" 
               alt="Social Links Header" 
+              width={400}
+              height={200}
               className="w-full h-auto mb-2"
             />
             
