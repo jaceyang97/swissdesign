@@ -7,7 +7,7 @@ import { FaDoorOpen } from 'react-icons/fa6';
 import { useState } from 'react';
 
 // Constants
-const NAV_ITEMS = ['首页', '政策法规', '业务办理', '服务支持', '信息公示', '行业动态', '关于协会'];
+const NAV_ITEMS = ['首页', '机构概况', '新闻发布', '政务信息', '办事服务', '互动交流', '统计信息', '专题专栏'];
 const LANGUAGES = [
   'ENGLISH', '繁體中文', 'PORTUGUÊS (BRASIL)', 'POLSKI', '한국어', '日本語',
   'ITALIANO', 'FRANÇAIS', 'ESPAÑOL (MÉXICO)', 'ESPAÑOL', 'DEUTSCH', 'РУССКИЙ'
@@ -125,6 +125,7 @@ const LanguageDropdown = ({
 export default function Home() {
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
 
   const toggleLanguageDropdown = () => setIsLanguageDropdownOpen(!isLanguageDropdownOpen);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -146,15 +147,33 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
+      {/* Disclaimer Banner */}
+      {showDisclaimer && (
+        <div className="fixed top-0 left-0 right-0 bg-black/95 text-white z-[100] p-4 border-b border-red-500">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex-1 text-sm sm:text-base">
+              <p className="font-bold mb-1">免责声明</p>
+              <p>本网站为个人设计作品展示，与中国证券监督管理委员会（以下简称"证监会"）无任何关联。本网站所展示的内容、设计元素及标识仅用于展示目的，不代表证监会的官方立场或观点。本网站不提供任何证券监管、投资建议或金融服务。未经本人授权，任何人不得使用本网站内容进行商业用途或误导公众。</p>
+            </div>
+            <button 
+              onClick={() => setShowDisclaimer(false)}
+              className="ml-4 px-4 py-2 text-sm border border-white hover:bg-white hover:text-black transition-colors"
+            >
+              关闭
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Navigation Bar */}
       <nav className="flex relative sticky top-0 z-50">
         {/* Red strip with logo */}
-        <div className="w-12 sm:w-16 relative" style={{ backgroundColor: BRAND_COLOR }}>
+        <div className="w-12 sm:w-16 relative" style={{ backgroundColor: 'white' }}>
           <div className="absolute inset-0 flex items-center justify-center">
             <img 
-              src="/cfa_logo_black.svg" 
+              src="/csrc_logo.svg" 
               alt="CFA Logo" 
-              className="w-6 h-6 sm:w-10 sm:h-10"
+              className="w-6 h-6 sm:w-12 sm:h-12"
             />
           </div>
         </div>
@@ -254,7 +273,7 @@ export default function Home() {
       </nav>
 
       {/* Main content area */}
-      <div className="h-screen flex relative">
+      <div className="video-main-page h-screen flex relative">
         {/* Background Video */}
         <video 
           className="absolute inset-0 w-full h-full object-cover z-0"
@@ -265,6 +284,9 @@ export default function Home() {
         >
           <source src="/frontpage_video.mp4" type="video/mp4" />
         </video>
+        
+        {/* Dark overlay */}
+        <div className="absolute inset-0 w-full h-full bg-black/50 z-[1]"></div>
         
         {/* Red strip on the left */}
         <div className="w-8 sm:w-12 lg:w-16 relative flex flex-col items-center justify-end pb-12 sm:pb-16 lg:pb-24 z-10" style={{ backgroundColor: BRAND_COLOR }}>
@@ -283,13 +305,13 @@ export default function Home() {
               className="text-sm sm:text-base lg:text-lg font-normal text-white mb-1 sm:mb-2 ml-1 sm:ml-2"
               style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
             >
-              CHINA FUTURES ASSOCIATION
+              CHINA SECURITIES REGULATORY COMMISSION
             </h2>
             <h1 
               className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white relative"
               style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
             >
-              中国期货业协会
+              中国证券监督管理委员会
               <span 
                 className="absolute -top-1 sm:-top-2 text-xs sm:text-sm lg:text-base"
                 style={{ right: '-2px' }}
@@ -302,7 +324,7 @@ export default function Home() {
       </div>
 
       {/* Second Section - Industry News */}
-      <div className="bg-white" style={{ height: '115vh' }}>
+      <div className="news bg-white" style={{ height: '115vh' }}>
         {/* 8-panel grid layout: 2 rows x 4 columns with custom row heights */}
         <div className="h-full grid grid-cols-4 gap-0" style={{ gridTemplateRows: '1fr 1.4fr' }}>
           {/* Combined first two panels for title (top-left, spans 2 columns) */}
@@ -328,7 +350,7 @@ export default function Home() {
               className="text-sm sm:text-base text-gray-700 mb-6 sm:mb-8 leading-relaxed"
               style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
             >
-              紧跟协会公告、行业要闻和媒体看期市的最新资讯动态。
+              紧跟时政要闻、证监会要闻和新闻发布会的最新资讯动态。
             </p>
             
             {/* Button */}
@@ -433,7 +455,7 @@ export default function Home() {
               className="text-white text-xs sm:text-sm leading-relaxed mb-4 flex-1 px-4"
               style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
             >
-              登记备案、信息报送、信息公示、资格考试、培训学苑、适当性测试、上市品种、投资者园地、重要会议、乡村振兴、研究管理系统
+              公开指南、公开年度报告、主动公开目录、依申请公开、网上办事服务平台、办事指南、公众留言、征求意见、举报专栏、信访专栏
             </p>
             
             {/* Quick entry button at exact bottom right corner */}
@@ -464,7 +486,7 @@ export default function Home() {
                   className="text-sm sm:text-base text-gray-600 mb-2 leading-tight"
                   style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
                 >
-                  &ldquo;中期协联合研究计划（第十八期）&rdquo; 启动公告
+                  &ldquo;中国经济持续展现强劲韧性&rdquo;
                 </p>
                 
                 {/* Main title */}
@@ -472,7 +494,7 @@ export default function Home() {
                   className="text-base sm:text-lg md:text-xl font-bold text-black leading-tight"
                   style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
                 >
-                  本期聚焦衍生品市场监管强化、服务实体经济路径研究与市场机制创新支持。
+                  国际人士积极评价中国一系列政策举措提振经济发展信心。
                 </h3>
               </div>
               
@@ -503,7 +525,7 @@ export default function Home() {
                   className="text-sm sm:text-base text-gray-600 mb-2 leading-tight"
                   style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
                 >
-                  关于健全资源环境要素市场化配置体系的意见
+                  关于完善中国特色现代企业制度的意见
                 </p>
                 
                 {/* Subtitle (larger text) */}
@@ -511,7 +533,7 @@ export default function Home() {
                   className="text-base sm:text-lg md:text-xl font-bold text-black leading-tight"
                   style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
                 >
-                  明确碳、水、污三权交易路径，完善要素市场制度，推动资源配置精细化、市场化。
+                  为贯彻落实党中央关于完善中国特色现代企业制度的战略部署，经党中央、国务院同意，现提出如下意见。
                 </h3>
               </div>
               
@@ -545,7 +567,7 @@ export default function Home() {
                   className="text-sm sm:text-base text-gray-600 mb-2 leading-tight"
                   style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
                 >
-                  衍生品工具箱不断丰富 期市服务实体经济能力再升级
+                  2024年4月12日新闻发布会
                 </p>
                 
                 {/* Subtitle (larger text) */}
@@ -553,7 +575,7 @@ export default function Home() {
                   className="text-base sm:text-lg md:text-xl font-bold text-black leading-tight"
                   style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
                 >
-                  衍生品工具新增铸造铝合金、纯苯、丙烯，增强期市服务能力与产业协同深度。
+                  加强监管、防范风险，推动资本市场高质量发展。
                 </h3>
               </div>
               
@@ -569,94 +591,440 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Third Section - About CFA */}
-      <div className="bg-white relative pl-2 sm:pl-4 lg:pl-6 pr-8 sm:pr-12 lg:pr-16 py-8 sm:py-12 lg:py-16" style={{ height: '140vh' }}>
-        {/* Main content in top left */}
-        <div className="w-full">
-          {/* Subtitle */}
-          <p 
-            className="text-lg sm:text-xl text-gray-600 mb-4"
+      {/* Section 3 - About CFA */}
+      <div className="textblock w-full pt-24 pb-40 px-8">
+        <div>
+          <span 
+            className="textblock__subtitle block text-lg sm:text-xl text-gray-600 mb-4"
             style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
           >
-            市场的秩序引擎
-          </p>
-          
-          {/* Main title - spanning 2 rows */}
-          <h1 
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black mb-16 leading-[0.9]"
+            资本市场的制度守护者
+          </span>
+          <span 
+            className="textblock__title block text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black leading-[0.9]"
             style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
           >
-            驱动中国期货生态的中枢系统<br />构建稳健与创新并行的市场结构
-          </h1>
-          
-          {/* Description without box */}
-          <div className="max-w-lg mt-32">
+            推动中国资本市场行稳致远<br />构建公开、公平、公正的市场秩序
+          </span>
+        </div>
+      </div>
+      <div className="pitchblock w-full max-w-full aspect-[2/1] relative">
+        <div className="pitchblock__text-box absolute top-0 left-0 w-1/2 h-full bg-white overflow-auto relative" style={{ boxSizing: 'border-box' }}>
+          <div className="pitchblock__text-box_annotation p-4 max-w-[60%]">
             <p 
               className="text-base sm:text-lg leading-relaxed mb-4 text-gray-800"
               style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
             >
-              中国期货业协会致力于构建一个公开、公平、公正的期货市场环境。我们联合行业成员制定规则、强化自律监管、推动产品创新、提升服务实体经济的能力——这一切，都为中国期货市场的稳健发展保驾护航。
+              中国证券监督管理委员会是国务院直属正部级机构，全面负责我国证券、期货市场的统一监督管理。自成立以来，证监会始终坚持依法从严监管，围绕"建制度、不干预、零容忍"的监管主线，持续推进资本市场改革，完善发行上市、并购重组、信息披露、交易监管、退市制度等关键环节的制度建设。通过压实中介机构"看门人"责任、强化对违法违规行为的打击、加强对中小投资者的权益保护，证监会不断提升市场透明度与公信力，维护市场公平秩序，坚定市场信心。
             </p>
             <p 
               className="text-base sm:text-lg leading-relaxed text-gray-800"
               style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
             >
-              我们不仅是规则的制定者，更是行业发展的合作者，致力于打造具备国际竞争力的期货生态系统。
+              同时，证监会积极服务国家战略，推动科技创新企业融资，鼓励长期资金入市，完善多层次资本市场体系，提升资本市场对实体经济的支持能力。通过推进监管数字化转型，加强与境内外监管机构的协作，证监会致力于构建规范、透明、开放、有活力、有韧性的资本市场生态，助力中国经济高质量发展。
             </p>
           </div>
+          <div className="pitchblock__text-box_item bg-black text-white pb-12 border border-white/20 w-[60%] absolute bottom-0 left-0">
+            <h3 
+              className="text-sm font-bold mb-2 px-6 pt-4"
+              style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
+            >
+              核心职能
+            </h3>
+            <h4 
+              className="text-3xl font-semibold mb-3 px-6"
+              style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
+            >
+              中国证监会
+            </h4>
+            <p 
+              className="text-sm leading-relaxed mb-4 px-6 text-gray-400"
+              style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
+            >
+              在这里，监管、法治与市场力量协同共进。中国证监会统筹发行审核、交易行为、信息披露与市场秩序，打击违法违规，压实"关键少数"责任，提升上市公司质量。通过持续制度创新与跨境协同，推动中国资本市场走向更加稳健、包容和国际化的未来。
+            </p>
+            <button 
+              className="absolute bottom-0 right-0 bg-white text-black px-10 py-3 text-sm hover:bg-black hover:text-red-500 hover:border hover:border-red-500 transition-colors"
+              style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
+            >
+              进一步了解 ↗
+            </button>
+          </div>
         </div>
+        <div className="pitchblock__image absolute top-0 right-0 w-1/2 h-full" style={{ backgroundImage: 'url(/section3_stage.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+      </div>
 
-        {/* Placeholder square background */}
-        <div className="absolute right-0 bottom-0 w-[820px] h-[820px]" style={{ backgroundImage: 'url(/section3_stage.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-
-        {/* Black box in exact bottom left corner of section */}
-        <div className="absolute bg-black text-white max-w-lg pb-12 border border-white/20" style={{ bottom: 0, left: 0 }}>
+      {/* Fourth Section - Animated Block */}
+      <div className="animatedblock w-full aspect-[2/1] bg-gray-200 relative">
+        <img 
+          src="/section4.png" 
+          alt="Section 4" 
+          className="w-full h-full object-cover"
+        />
+        <div className="animatedblock__text-box_item bg-black text-white pb-12 border border-white/20 w-1/4 h-1/3 absolute bottom-0 right-0">
           <h3 
             className="text-sm font-bold mb-2 px-6 pt-4"
             style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
           >
-            行业舞台
+            全品类监管覆盖
           </h3>
           <h4 
             className="text-3xl font-semibold mb-3 px-6"
             style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
           >
-            中国期货市场
+            证监会统一监管商品与金融衍生品市场
           </h4>
           <p 
             className="text-sm leading-relaxed mb-4 px-6 text-gray-400"
             style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
           >
-            在这里，监管、技术与市场力量交织共生。中国期货业协会聚合券商、交易所、投资机构等多方资源，推动风险管理工具的多样化，服务实体经济的发展新路径。规范与发展并举，信任与创新同行——这是我们共同参与和塑造的市场未来。
+            证监会依法对金属、能源、农产、金融等期货与期权市场实施全链条监管，保障市场规范运作，提升服务实体经济能力。通过完善品种上市制度与交易监管机制，推动衍生品市场稳健发展与功能发挥。
           </p>
           <button 
             className="absolute bottom-0 right-0 bg-white text-black px-10 py-3 text-sm hover:bg-black hover:text-red-500 hover:border hover:border-red-500 transition-colors"
             style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
           >
-            进一步了解 ↗
+            了解更多 ↗
           </button>
         </div>
       </div>
 
-      {/* Fourth Section - Placeholder */}
-      <div className="h-screen bg-gray-50 relative flex items-center justify-center">
-        <h2 
-          className="text-4xl font-bold text-gray-400"
-          style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
-        >
-          Section 4 - Placeholder
-        </h2>
+      {/* Fifth Section - Chart Block */}
+      <div className="chartblock w-full aspect-[4/3] bg-stone-50 relative">
+        <div className="grid grid-cols-4 grid-rows-3 h-full w-full">
+          {/* Combined panels 1-2 */}
+          <div className="col-span-2 flex flex-col items-start justify-start bg-black p-8">
+            <span className="text-white text-sm font-bold mb-4">科技驱动 · 创新监管</span>
+            <h2 className="text-6xl font-bold text-white mb-6 leading-tight">科技赋能监管，<br />教育护航投资未来</h2>
+            <div className="w-3/4">
+              <p className="text-gray-400 text-sm leading-relaxed mb-8">
+                证监会依托大数据、AI、RPA等技术手段，不断升级科技监管能力，打造&ldquo;业务在线、合规在线、监管在线&rdquo;的监管新生态。同时深化投资者教育，建设全国投资者教育基地，开展互动式教学与风险提示，增强公众理性投资意识。
+              </p>
+            </div>
+            <button className="bg-white text-black px-6 py-3 text-sm hover:bg-red-500 hover:text-white transition-colors flex items-center">
+              了解科案例与教育基地 <span className="ml-2">↗</span>
+            </button>
+          </div>
+          {/* Combined panels 3-4-7-8 */}
+          <div className="col-span-2 row-span-2 flex items-center justify-center bg-black relative overflow-hidden">
+            <img 
+              src="/section5_3.png" 
+              alt="Section 5 Image 3" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
+          {/* Panel 5 */}
+          <div className="flex items-center justify-center bg-black relative overflow-hidden">
+            <img 
+              src="/section5_1.png" 
+              alt="Section 5 Image 1" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
+          {/* Panel 6 */}
+          <div className="flex items-center justify-center bg-black">
+          </div>
+          {/* Panel 9 */}
+          <div className="flex items-center justify-center bg-black">
+          </div>
+          {/* Panel 10 */}
+          <div className="flex items-center justify-center bg-black relative overflow-hidden">
+            <img 
+              src="/section5_2.png" 
+              alt="Section 5 Image 2" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
+          {/* Panel 11 */}
+          <div className="flex items-center justify-center bg-black">
+          </div>
+          {/* Panel 12 */}
+          <div className="flex items-center justify-center bg-black">
+          </div>
+        </div>
       </div>
 
-      {/* Fifth Section - Placeholder */}
-      <div className="h-screen bg-stone-50 relative flex items-center justify-center">
-        <h2 
-          className="text-4xl font-bold text-gray-400"
-          style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
-        >
-          Section 5 - Placeholder
-        </h2>
+      {/* Footer Section */}
+      <div className="footer w-full bg-black text-white">
+        <div className="grid grid-cols-12" style={{ gridTemplateRows: '2fr 0.7fr 2fr 0.7fr 1fr', height: '36rem', width: '100%' }}>
+          {/* 5 rows x 12 columns = 60 cells */}
+          {Array.from({ length: 5 }).map((_, rowIdx) => (
+            Array.from({ length: 12 }).map((_, colIdx) => {
+              // Merge R3C1 to R5C3 into a single cell
+              if (rowIdx === 2 && colIdx === 0) {
+                return (
+                  <div key={`r3c1-merged`} className="flex items-end justify-start row-span-3 col-span-3 bg-black h-full w-full">
+                    <img src="/actual_logo.png" alt="CSRC Logo" className="h-24 w-auto object-contain bg-white" />
+                  </div>
+                );
+              }
+              // Skip rendering the rest of the merged region
+              if (
+                (rowIdx >= 2 && rowIdx <= 4) && (colIdx >= 0 && colIdx <= 2) && !(rowIdx === 2 && colIdx === 0)
+              ) {
+                return null;
+              }
+
+              // Merge R2C2 to R2C3 into a single cell
+              if (rowIdx === 1 && colIdx === 1) {
+                return (
+                  <div key={`r2c2-merged`} className="flex items-center justify-start col-span-2 bg-black border border-red-500 pl-4">
+                    <span className="text-red-500 text-lg font-medium">社交媒体</span>
+                  </div>
+                );
+              }
+              // Skip rendering R2C3
+              if (rowIdx === 1 && colIdx === 2) {
+                return null;
+              }
+              // R2C1 single cell, make border red and set text to (5), align left with padding
+              if (rowIdx === 1 && colIdx === 0) {
+                return (
+                  <div key={`r2c1`} className="flex items-center justify-start bg-black border border-red-500 pl-4">
+                    <span className="text-red-500 text-lg font-medium">(5)</span>
+                  </div>
+                );
+              }
+
+              let cellClass = 'flex items-center justify-center';
+              if (rowIdx === 0 && colIdx < 6) {
+                cellClass += ' border-t border-white'; // Add top border to first 6 cells in row 1
+              } else if (rowIdx === 1 && colIdx === 0) {
+                cellClass += ' border border-white'; // R2C1
+              } else if (rowIdx === 1 && colIdx === 1) {
+                cellClass += ' border-t border-b border-l border-white'; // R2C2
+              } else if (rowIdx === 1 && colIdx === 2) {
+                cellClass += ' border-t border-b border-r border-white'; // R2C3
+              }
+
+              // Borders for R3C4 to R4C6 block
+              // Top row of block
+              if (rowIdx === 2 && colIdx === 3) {
+                cellClass += ' border-t border-l border-white'; // Top-left
+              } else if (rowIdx === 2 && colIdx === 4) {
+                cellClass += ' border-t border-white'; // Top-middle
+              } else if (rowIdx === 2 && colIdx === 5) {
+                cellClass += ' border-t border-r border-white'; // Top-right
+              }
+              // Bottom row of block
+              if (rowIdx === 3 && colIdx === 3) {
+                cellClass += ' border-b border-l border-white'; // Bottom-left
+              } else if (rowIdx === 3 && colIdx === 4) {
+                cellClass += ' border-b border-white'; // Bottom-middle
+              } else if (rowIdx === 3 && colIdx === 5) {
+                cellClass += ' border-b border-r border-white'; // Bottom-right
+              }
+
+              // Merge R1C7 to R2C9 into a single cell
+              if (rowIdx === 0 && colIdx === 6) {
+                return (
+                  <div key={`r1c7-merged`} className="flex items-start justify-start row-span-2 col-span-3 bg-black border border-white h-full w-full p-4">
+                    <span className="text-white text-base font-semibold leading-snug">
+                    中国证监会致力于构建一个更加规范、透明、有韧性的资本市场。我们相信，健康的市场秩序源于严谨的监管，也来自每一位投资者对规则的信任。无论你是市场新手还是资深机构，清晰、可预期的制度环境，始终是我们努力的方向。
+                    </span>
+                  </div>
+                );
+              }
+              // Skip rendering the rest of the merged region for R1C7 to R2C9
+              if (
+                (rowIdx === 0 && (colIdx === 7 || colIdx === 8)) ||
+                (rowIdx === 1 && (colIdx >= 6 && colIdx <= 8))
+              ) {
+                return null;
+              }
+
+              // R5C4 single cell, remove top border and fill with CFA logo
+              if (rowIdx === 4 && colIdx === 3) {
+                return (
+                  <div key={`r5c4`} className="flex items-center justify-center bg-black border-l border-b border-r border-white h-full w-full">
+                    <img src="/csrc_logo.svg" alt="CFA Logo" className="h-18 w-auto" />
+                  </div>
+                );
+              }
+
+              // Merge R5C5 to R5C6 into a single cell, remove top border and fill with copyright text
+              if (rowIdx === 4 && colIdx === 4) {
+                return (
+                  <div key={`r5c5-merged`} className="flex items-center justify-start col-span-2 bg-black border-l border-b border-r border-white h-full w-full pl-4">
+                    <span className="text-white text-xs">© 2025 中国证券监督管理委员会</span>
+                  </div>
+                );
+              }
+              // Skip rendering R5C6
+              if (rowIdx === 4 && colIdx === 5) {
+                return null;
+              }
+
+              // R5C7 single cell, fill with badge.png, centered
+              if (rowIdx === 4 && colIdx === 6) {
+                return (
+                  <div key={`r5c7`} className="flex items-center justify-center bg-black border border-white h-full w-full">
+                    <img src="/badge.png" alt="badge" className="h-20 w-auto" />
+                  </div>
+                );
+              }
+
+              // Merge R5C8 to R5C12 into a single cell, fill with provided text, left-aligned with padding
+              if (rowIdx === 4 && colIdx === 7) {
+                return (
+                  <div key={`r5c8-merged`} className="flex items-center justify-center col-span-5 bg-black border border-white h-full w-full pl-4">
+                    <span className="text-white text-xs">京ICP备37182615号-1</span>
+                    <img src="/beian.png" alt="beian" className="h-4 w-auto mx-2 inline-block align-middle" />
+                    <span className="text-white text-xs">京公网安备 8921153702840 号</span>
+                  </div>
+                );
+              }
+              // Skip rendering R5C9, R5C10, R5C11, R5C12
+              if (rowIdx === 4 && (colIdx >= 8 && colIdx <= 11)) {
+                return null;
+              }
+
+              // Merge R3C10 to R3C12 into a single cell, fill with list and up-right arrow icon
+              if (rowIdx === 2 && colIdx === 9) {
+                return (
+                  <div key={`r3c10-merged`} className="flex flex-col items-start justify-center col-span-3 bg-black border border-white h-full w-full p-2">
+                    <ul className="grid grid-cols-2 gap-x-2 gap-y-2 w-full">
+                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">上海证券交易所</span></span>
+                      </li>
+                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">深圳证券交易所</span></span>
+                      </li>
+                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">北京证券交易所</span></span>
+                      </li>
+                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">上海期货交易所</span></span>
+                      </li>
+                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">郑州商品交易所</span></span>
+                      </li>
+                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">大连商品交易所</span></span>
+                      </li>
+                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">中国金融期货交易所</span></span>
+                      </li>
+                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+                        <span className="group-hover:bg-red-500 group-hover:text-black transition-colors">[ <span className="mx-1">↗</span> ] <span className="ml-2">广州期货交易所</span></span>
+                      </li>
+                    </ul>
+                  </div>
+                );
+              }
+              // Skip rendering R3C11 and R3C12
+              if (rowIdx === 2 && (colIdx === 10 || colIdx === 11)) {
+                return null;
+              }
+
+              // Merge R3C7 to R4C9 into a single cell, remove left border and add red strip pattern aligned to the right
+              if (rowIdx === 2 && colIdx === 6) {
+                return (
+                  <div
+                    key={`r3c7-merged`}
+                    className="flex items-center justify-end row-span-2 col-span-3 bg-black border-t border-b border-r border-white h-full w-full relative"
+                  >
+                    <div
+                      className="absolute right-0 top-0 h-full"
+                      style={{
+                        width: '33.3333%',
+                        backgroundImage:
+                          'repeating-linear-gradient(135deg, #ef4444 0 20px, #000 20px 40px)',
+                        backgroundPosition: 'right',
+                        backgroundRepeat: 'repeat',
+                        backgroundSize: '60px 60px',
+                      }}
+                    />
+                  </div>
+                );
+              }
+              // Skip rendering the rest of the merged region for R3C7 to R4C9
+              if (
+                (rowIdx === 2 && (colIdx === 7 || colIdx === 8)) ||
+                (rowIdx === 3 && (colIdx >= 6 && colIdx <= 8))
+              ) {
+                return null;
+              }
+
+              // Merge R1C10 to R2C12 into a single cell
+              if (rowIdx === 0 && colIdx === 9) {
+                return (
+                  <div key={`r1c10-merged`} className="flex items-center justify-center row-span-2 col-span-3 bg-black border border-white">
+                  </div>
+                );
+              }
+              // Skip rendering the rest of the merged region for R1C10 to R2C12
+              if (
+                (rowIdx === 0 && (colIdx === 10 || colIdx === 11)) ||
+                (rowIdx === 1 && (colIdx >= 9 && colIdx <= 11))
+              ) {
+                return null;
+              }
+
+              // Merge R3C4 to R4C6 into a single cell
+              if (rowIdx === 2 && colIdx === 3) {
+                return (
+                  <div key={`r3c4-merged`} className="flex flex-col items-start justify-center row-span-2 col-span-3 bg-black border border-red-500 p-2">
+                    <ul className="space-y-3">
+                      <li className="flex items-center text-red-500 text-lg font-medium">
+                        <span className="mr-2">[</span>
+                        <FaWeixin className="inline-block" />
+                        <span className="ml-1 mr-2">]</span>
+                        <span>微信</span>
+                      </li>
+                      <li className="flex items-center text-red-500 text-lg font-medium">
+                        <span className="mr-2">[</span>
+                        <AiFillWeiboSquare className="inline-block" />
+                        <span className="ml-1 mr-2">]</span>
+                        <span>微博</span>
+                      </li>
+                      <li className="flex items-center text-red-500 text-lg font-medium">
+                        <span className="mr-2">[</span>
+                        <AiFillBilibili className="inline-block" />
+                        <span className="ml-1 mr-2">]</span>
+                        <span>哔哩哔哩</span>
+                      </li>
+                      <li className="flex items-center text-red-500 text-lg font-medium">
+                        <span className="mr-2">[</span>
+                        <AiFillTikTok className="inline-block" />
+                        <span className="ml-1 mr-2">]</span>
+                        <span>抖音</span>
+                      </li>
+                      <li className="flex items-center text-red-500 text-lg font-medium">
+                        <span className="mr-2">[</span>
+                        <AiOutlineAlipayCircle className="inline-block" />
+                        <span className="ml-1 mr-2">]</span>
+                        <span>支付宝</span>
+                      </li>
+                    </ul>
+                  </div>
+                );
+              }
+              // Skip rendering the rest of the merged region for R3C4 to R4C6
+              if (
+                (rowIdx === 2 && (colIdx === 4 || colIdx === 5)) ||
+                (rowIdx === 3 && (colIdx >= 3 && colIdx <= 5))
+              ) {
+                return null;
+              }
+
+              // R1C1 to R1C6 cells with top border
+              if (rowIdx === 0 && colIdx < 6) {
+                return (
+                  <div key={`r${rowIdx + 1}c${colIdx + 1}`} className="flex items-center justify-center bg-black border-t border-white">
+                  </div>
+                );
+              }
+
+              return (
+                <div key={`r${rowIdx + 1}c${colIdx + 1}`} className={cellClass}>
+                </div>
+              );
+            })
+          ))}
+        </div>
       </div>
+      <div className="pb-4 bg-black"></div>
     </div>
   );
 }
