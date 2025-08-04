@@ -179,6 +179,325 @@ export default function Home() {
     }
   };
 
+  const footerCells = [
+    // Top row cells with border
+    { key: 'r1c1', row: 1, col: 1, className: 'flex items-center justify-center bg-black border-t border-white border-[1.25px]' },
+    { key: 'r1c2', row: 1, col: 2, className: 'flex items-center justify-center bg-black border-t border-white border-[1.25px]' },
+    { key: 'r1c3', row: 1, col: 3, className: 'flex items-center justify-center bg-black border-t border-white border-[1.25px]' },
+    { key: 'r1c4', row: 1, col: 4, className: 'flex items-center justify-center bg-black border-t border-white border-[1.25px]' },
+    { key: 'r1c5', row: 1, col: 5, className: 'flex items-center justify-center bg-black border-t border-white border-[1.25px]' },
+    { key: 'r1c6', row: 1, col: 6, className: 'flex items-center justify-center bg-black border-t border-white border-[1.25px]' },
+
+    // Row 2 special cells
+    {
+      key: 'r2c1',
+      row: 2,
+      col: 1,
+      className:
+        'flex items-center justify-start bg-black border-[1.25px] border-[#D00403] pl-4',
+      content: <span className="text-[#D00403] text-lg font-medium">(5)</span>,
+    },
+    {
+      key: 'r2c2-merged',
+      row: 2,
+      col: 2,
+      colSpan: 2,
+      className:
+        'flex items-center justify-start bg-black border-[1.25px] border-[#D00403] pl-4',
+      content: <span className="text-[#D00403] text-lg font-medium">社交媒体</span>,
+    },
+
+    // R3C1 to R5C3 merged cell
+    {
+      key: 'r3c1-merged',
+      row: 3,
+      col: 1,
+      rowSpan: 3,
+      colSpan: 3,
+      className: 'flex items-end justify-start bg-black h-full w-full p-4',
+      content: (
+        <div className="flex items-end pr-2">
+          <Image
+            src="/china_logo.svg"
+            alt="China Logo"
+            width={48}
+            height={48}
+            className="h-14 w-auto"
+          />
+          <div className="flex flex-col w-[280px] ml-2">
+            <h1 className="text-xl font-bold text-white mb-2 text-center">
+              中国证券监督管理委员会
+            </h1>
+            <h2 className="text-xs text-white text-center">
+              CHINA SECURITIES REGULATORY COMMISSION
+            </h2>
+          </div>
+        </div>
+      ),
+    },
+
+    // R1C7 to R2C9 merged cell
+    {
+      key: 'r1c7-merged',
+      row: 1,
+      col: 7,
+      rowSpan: 2,
+      colSpan: 3,
+      className:
+        'flex items-start justify-start bg-black border border-white border-[1.25px] h-full w-full p-4',
+      content: (
+        <span className="text-white text-base font-semibold leading-snug">
+          中国证监会致力于构建一个更加规范、透明、有韧性的资本市场。我们相信，健康的市场秩序源于严谨的监管，也来自每一位投资者对规则的信任。无论你是市场新手还是资深机构，清晰、可预期的制度环境，始终是我们努力的方向。
+        </span>
+      ),
+    },
+
+    // R1C10 to R2C12 merged cell
+    {
+      key: 'r1c10-merged',
+      row: 1,
+      col: 10,
+      rowSpan: 2,
+      colSpan: 3,
+      className:
+        'flex items-center justify-center bg-black border border-white border-[1.25px]',
+    },
+
+    // R3C4 to R4C6 merged cell
+    {
+      key: 'r3c4-merged',
+      row: 3,
+      col: 4,
+      rowSpan: 2,
+      colSpan: 3,
+      className:
+        'flex flex-col items-start justify-center bg-black border-[1.25px] border-[#D00403] p-2',
+      content: (
+        <ul className="space-y-3">
+          <li className="flex items-center text-[#D00403] text-lg font-medium">
+            <span className="mr-2">[</span>
+            <FaWeixin className="inline-block" />
+            <span className="ml-1 mr-2">]</span>
+            <span>微信</span>
+          </li>
+          <li className="flex items-center text-[#D00403] text-lg font-medium">
+            <span className="mr-2">[</span>
+            <AiFillWeiboSquare className="inline-block" />
+            <span className="ml-1 mr-2">]</span>
+            <span>微博</span>
+          </li>
+          <li className="flex items-center text-[#D00403] text-lg font-medium">
+            <span className="mr-2">[</span>
+            <AiFillBilibili className="inline-block" />
+            <span className="ml-1 mr-2">]</span>
+            <span>哔哩哔哩</span>
+          </li>
+          <li className="flex items-center text-[#D00403] text-lg font-medium">
+            <span className="mr-2">[</span>
+            <AiFillTikTok className="inline-block" />
+            <span className="ml-1 mr-2">]</span>
+            <span>抖音</span>
+          </li>
+          <li className="flex items-center text-[#D00403] text-lg font-medium">
+            <span className="mr-2">[</span>
+            <AiOutlineAlipayCircle className="inline-block" />
+            <span className="ml-1 mr-2">]</span>
+            <span>支付宝</span>
+          </li>
+        </ul>
+      ),
+    },
+
+    // R3C7 to R4C9 merged cell
+    {
+      key: 'r3c7-merged',
+      row: 3,
+      col: 7,
+      rowSpan: 2,
+      colSpan: 3,
+      className: 'flex items-center justify-end bg-black h-full w-full relative',
+      content: (
+        <div
+          className="absolute right-0 top-0 h-full"
+          style={{
+            width: '96px',
+            height: '100%',
+            backgroundImage: `repeating-linear-gradient(135deg, ${BRAND_COLOR} 0 16px, transparent 8px 35px)`,
+            backgroundPosition: 'right',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: '100px 100%'
+          }}
+        />
+      ),
+    },
+
+    // R3C10 to R3C12 merged cell
+    {
+      key: 'r3c10-merged',
+      row: 3,
+      col: 10,
+      colSpan: 3,
+      className:
+        'flex flex-col items-start justify-center bg-black border-t border-white border-[1.25px] h-full w-full p-2',
+      content: (
+        <ul className="grid grid-cols-2 gap-x-2 gap-y-2 w-full">
+          <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+            <a
+              href="https://www.sse.com.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group-hover:bg-[#D00403] group-hover:text-black transition-colors"
+            >
+              [ <span className="mx-1">↗</span> ] <span className="ml-2">上海证券交易所</span>
+            </a>
+          </li>
+          <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+            <a
+              href="https://www.szse.cn/index/index.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group-hover:bg-[#D00403] group-hover:text-black transition-colors"
+            >
+              [ <span className="mx-1">↗</span> ] <span className="ml-2">深圳证券交易所</span>
+            </a>
+          </li>
+          <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+            <a
+              href="https://www.bse.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group-hover:bg-[#D00403] group-hover:text-black transition-colors"
+            >
+              [ <span className="mx-1">↗</span> ] <span className="ml-2">北京证券交易所</span>
+            </a>
+          </li>
+          <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+            <a
+              href="https://www.shfe.com.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group-hover:bg-[#D00403] group-hover:text-black transition-colors"
+            >
+              [ <span className="mx-1">↗</span> ] <span className="ml-2">上海期货交易所</span>
+            </a>
+          </li>
+          <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+            <a
+              href="http://www.czce.com.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group-hover:bg-[#D00403] group-hover:text-black transition-colors"
+            >
+              [ <span className="mx-1">↗</span> ] <span className="ml-2">郑州商品交易所</span>
+            </a>
+          </li>
+          <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+            <a
+              href="http://www.dce.com.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group-hover:bg-[#D00403] group-hover:text-black transition-colors"
+            >
+              [ <span className="mx-1">↗</span> ] <span className="ml-2">大连商品交易所</span>
+            </a>
+          </li>
+          <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+            <a
+              href="http://www.cffex.com.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group-hover:bg-[#D00403] group-hover:text-black transition-colors"
+            >
+              [ <span className="mx-1">↗</span> ] <span className="ml-2">中国金融期货交易所</span>
+            </a>
+          </li>
+          <li className="flex items-center text-white text-base font-medium group cursor-pointer">
+            <a
+              href="http://www.gfex.com.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group-hover:bg-[#D00403] group-hover:text-black transition-colors"
+            >
+              [ <span className="mx-1">↗</span> ] <span className="ml-2">广州期货交易所</span>
+            </a>
+          </li>
+        </ul>
+      ),
+    },
+
+    // R5C4 single cell
+    {
+      key: 'r5c4',
+      row: 5,
+      col: 4,
+      className:
+        'flex items-center justify-center bg-black border-l border-b border-r border-white h-full w-full',
+      content: (
+        <Image
+          src="/csrc_logo.svg"
+          alt="CSRC Logo"
+          width={48}
+          height={48}
+          className="h-12 w-auto"
+        />
+      ),
+    },
+
+    // R5C5 to R5C6 merged cell
+    {
+      key: 'r5c5-merged',
+      row: 5,
+      col: 5,
+      colSpan: 2,
+      className:
+        'flex items-center justify-start bg-black border-l border-b border-r border-white h-full w-full pl-4',
+      content: (
+        <span className="text-white text-xs">© 2025 中国证券监督管理委员会</span>
+      ),
+    },
+
+    // R5C7 single cell
+    {
+      key: 'r5c7',
+      row: 5,
+      col: 7,
+      className:
+        'flex items-center justify-center bg-black border border-white border-[1.25px] h-full w-full',
+      content: (
+        <Image
+          src="/badge.png"
+          alt="badge"
+          width={80}
+          height={80}
+          className="h-20 w-auto"
+        />
+      ),
+    },
+
+    // R5C8 to R5C12 merged cell
+    {
+      key: 'r5c8-merged',
+      row: 5,
+      col: 8,
+      colSpan: 5,
+      className:
+        'flex items-center justify-center bg-black border border-white border-[1.25px] h-full w-full pl-4',
+      content: (
+        <>
+          <span className="text-white text-xs">京ICP备20010911号-1</span>
+          <Image
+            src="/beian.png"
+            alt="beian"
+            width={16}
+            height={16}
+            className="h-4 w-auto mx-2 inline-block align-middle"
+          />
+          <span className="text-white text-xs">京公网安备 123456789000 号</span>
+        </>
+      ),
+    },
+  ];
+
   return (
     <div className="flex flex-col">
       {/* Disclaimer Banner */}
@@ -867,332 +1186,25 @@ export default function Home() {
       </div>
 
       {/* Footer Section */}
-      <div className="footer w-full bg-black text-white">
-        <div className="grid grid-cols-12" style={{ gridTemplateRows: '2fr 0.7fr 2fr 0.7fr 1fr', height: '36rem', width: '100%' }}>
-          {/* 5 rows x 12 columns = 60 cells */}
-          {Array.from({ length: 5 }).map((_, rowIdx) => (
-            Array.from({ length: 12 }).map((_, colIdx) => {
-              // Merge R3C1 to R5C3 into a single cell
-              if (rowIdx === 2 && colIdx === 0) {
-                return (
-                  <div key={`r3c1-merged`} className="flex items-end justify-start row-span-3 col-span-3 bg-black h-full w-full p-4">
-                    <div className="flex items-end pr-2">
-                      <Image 
-                        src="/china_logo.svg" 
-                        alt="China Logo" 
-                        width={48}
-                        height={48}
-                        className="h-14 w-auto" 
-                      />
-                      <div className="flex flex-col w-[280px] ml-2">
-                        <h1 className="text-xl font-bold text-white mb-2 text-center">中国证券监督管理委员会</h1>
-                        <h2 className="text-xs text-white text-center">CHINA SECURITIES REGULATORY COMMISSION</h2>
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-              // Skip rendering the rest of the merged region
-              if (
-                (rowIdx >= 2 && rowIdx <= 4) && (colIdx >= 0 && colIdx <= 2) && !(rowIdx === 2 && colIdx === 0)
-              ) {
-                return null;
-              }
-
-              // Merge R2C2 to R2C3 into a single cell
-              if (rowIdx === 1 && colIdx === 1) {
-                return (
-                  <div key={`r2c2-merged`} className="flex items-center justify-start col-span-2 bg-black border-[1.25px] border-[#D00403] pl-4">
-                    <span className="text-[#D00403] text-lg font-medium">社交媒体</span>
-                  </div>
-                );
-              }
-              // Skip rendering R2C3
-              if (rowIdx === 1 && colIdx === 2) {
-                return null;
-              }
-              // R2C1 single cell, make border red and set text to (5), align left with padding
-              if (rowIdx === 1 && colIdx === 0) {
-                return (
-                  <div key={`r2c1`} className="flex items-center justify-start bg-black border-[1.25px] border-[#D00403] pl-4">
-                    <span className="text-[#D00403] text-lg font-medium">(5)</span>
-                  </div>
-                );
-              }
-
-              let cellClass = 'flex items-center justify-center';
-              if (rowIdx === 0 && colIdx < 6) {
-                cellClass += ' border-t border-white border-[1.25px]'; // Add top border to first 6 cells in row 1
-              } else if (rowIdx === 1 && colIdx === 0) {
-                cellClass += ' border-l border-b border-white border-[1.25px]'; // R2C1
-              } else if (rowIdx === 1 && colIdx === 1) {
-                cellClass += ' border-b border-l border-white border-[1.25px]'; // R2C2
-              } else if (rowIdx === 1 && colIdx === 2) {
-                cellClass += ' border-b border-r border-white border-[1.25px]'; // R2C3
-              }
-
-              // Borders for R3C4 to R4C6 block
-              // Top row of block
-              if (rowIdx === 2 && colIdx === 3) {
-                cellClass += ' border-t border-white'; // Top-left
-              } else if (rowIdx === 2 && colIdx === 4) {
-                cellClass += ' border-t border-white'; // Top-middle
-              } else if (rowIdx === 2 && colIdx === 5) {
-                cellClass += ' border-t border-r border-white'; // Top-right
-              }
-              // Bottom row of block
-              if (rowIdx === 3 && colIdx === 3) {
-                cellClass += ' border-b border-white'; // Bottom-left
-              } else if (rowIdx === 3 && colIdx === 4) {
-                cellClass += ' border-b border-white'; // Bottom-middle
-              } else if (rowIdx === 3 && colIdx === 5) {
-                cellClass += ' border-b border-r border-white'; // Bottom-right
-              }
-
-              // Merge R1C7 to R2C9 into a single cell
-              if (rowIdx === 0 && colIdx === 6) {
-                return (
-                  <div key={`r1c7-merged`} className="flex items-start justify-start row-span-2 col-span-3 bg-black border border-white border-[1.25px] h-full w-full p-4">
-                    <span className="text-white text-base font-semibold leading-snug">
-                    中国证监会致力于构建一个更加规范、透明、有韧性的资本市场。我们相信，健康的市场秩序源于严谨的监管，也来自每一位投资者对规则的信任。无论你是市场新手还是资深机构，清晰、可预期的制度环境，始终是我们努力的方向。
-                    </span>
-                  </div>
-                );
-              }
-              // Skip rendering the rest of the merged region for R1C7 to R2C9
-              if (
-                (rowIdx === 0 && (colIdx === 7 || colIdx === 8)) ||
-                (rowIdx === 1 && (colIdx >= 6 && colIdx <= 8))
-              ) {
-                return null;
-              }
-
-              // R5C4 single cell, remove top border and fill with CFA logo
-              if (rowIdx === 4 && colIdx === 3) {
-                return (
-                  <div key={`r5c4`} className="flex items-center justify-center bg-black border-l border-b border-r border-white h-full w-full">
-                    <Image 
-                      src="/csrc_logo.svg" 
-                      alt="CSRC Logo"
-                      width={48}
-                      height={48}
-                      className="h-12 w-auto" 
-                    />
-                  </div>
-                );
-              }
-
-              // Merge R5C5 to R5C6 into a single cell, remove top border and fill with copyright text
-              if (rowIdx === 4 && colIdx === 4) {
-                return (
-                  <div key={`r5c5-merged`} className="flex items-center justify-start col-span-2 bg-black border-l border-b border-r border-white h-full w-full pl-4">
-                    <span className="text-white text-xs">© 2025 中国证券监督管理委员会</span>
-                  </div>
-                );
-              }
-              // Skip rendering R5C6
-              if (rowIdx === 4 && colIdx === 5) {
-                return null;
-              }
-
-              // R5C7 single cell, fill with badge.png, centered
-              if (rowIdx === 4 && colIdx === 6) {
-                return (
-                  <div key={`r5c7`} className="flex items-center justify-center bg-black border border-white border-[1.25px] h-full w-full">
-                    <Image 
-                      src="/badge.png" 
-                      alt="badge" 
-                      width={80}
-                      height={80}
-                      className="h-20 w-auto" 
-                    />
-                  </div>
-                );
-              }
-
-              // Merge R5C8 to R5C12 into a single cell, fill with provided text, left-aligned with padding
-              if (rowIdx === 4 && colIdx === 7) {
-                return (
-                  <div key={`r5c8-merged`} className="flex items-center justify-center col-span-5 bg-black border border-white border-[1.25px] h-full w-full pl-4">
-                    <span className="text-white text-xs">京ICP备20010911号-1</span>
-                    <Image 
-                      src="/beian.png" 
-                      alt="beian" 
-                      width={16}
-                      height={16}
-                      className="h-4 w-auto mx-2 inline-block align-middle" 
-                    />
-                    <span className="text-white text-xs">京公网安备 123456789000 号</span>
-                  </div>
-                );
-              }
-              // Skip rendering R5C9, R5C10, R5C11, R5C12
-              if (rowIdx === 4 && (colIdx >= 8 && colIdx <= 11)) {
-                return null;
-              }
-
-              // Merge R3C10 to R3C12 into a single cell, fill with list and up-right arrow icon
-              if (rowIdx === 2 && colIdx === 9) {
-                return (
-                  <div key={`r3c10-merged`} className="flex flex-col items-start justify-center col-span-3 bg-black border-t border-white border-[1.25px] h-full w-full p-2">
-                    <ul className="grid grid-cols-2 gap-x-2 gap-y-2 w-full">
-                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <a href="https://www.sse.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
-                          [ <span className="mx-1">↗</span> ] <span className="ml-2">上海证券交易所</span>
-                        </a>
-                      </li>
-                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <a href="https://www.szse.cn/index/index.html" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
-                          [ <span className="mx-1">↗</span> ] <span className="ml-2">深圳证券交易所</span>
-                        </a>
-                      </li>
-                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <a href="https://www.bse.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
-                          [ <span className="mx-1">↗</span> ] <span className="ml-2">北京证券交易所</span>
-                        </a>
-                      </li>
-                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <a href="https://www.shfe.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
-                          [ <span className="mx-1">↗</span> ] <span className="ml-2">上海期货交易所</span>
-                        </a>
-                      </li>
-                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <a href="http://www.czce.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
-                          [ <span className="mx-1">↗</span> ] <span className="ml-2">郑州商品交易所</span>
-                        </a>
-                      </li>
-                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <a href="http://www.dce.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
-                          [ <span className="mx-1">↗</span> ] <span className="ml-2">大连商品交易所</span>
-                        </a>
-                      </li>
-                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <a href="http://www.cffex.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
-                          [ <span className="mx-1">↗</span> ] <span className="ml-2">中国金融期货交易所</span>
-                        </a>
-                      </li>
-                      <li className="flex items-center text-white text-base font-medium group cursor-pointer">
-                        <a href="http://www.gfex.com.cn/" target="_blank" rel="noopener noreferrer" className="group-hover:bg-[#D00403] group-hover:text-black transition-colors">
-                          [ <span className="mx-1">↗</span> ] <span className="ml-2">广州期货交易所</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                );
-              }
-              // Skip rendering R3C11 and R3C12
-              if (rowIdx === 2 && (colIdx === 10 || colIdx === 11)) {
-                return null;
-              }
-
-              // Merge R3C7 to R4C9 into a single cell, add 4 diagonal strips using BRAND_COLOR aligned to the right
-              if (rowIdx === 2 && colIdx === 6) {
-                return (
-                  <div
-                    key={`r3c7-merged`}
-                    className="flex items-center justify-end row-span-2 col-span-3 bg-black h-full w-full relative"
-                  >
-                    <div
-                      className="absolute right-0 top-0 h-full"
-                      style={{
-                        width: '96px',
-                        height: '100%',
-                        backgroundImage: `repeating-linear-gradient(135deg, ${BRAND_COLOR} 0 16px, transparent 8px 35px)`,
-                        backgroundPosition: 'right',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundSize: '100px 100%'
-                      }}
-                    />
-                  </div>
-                );
-              }
-              // Skip rendering the rest of the merged region for R3C7 to R4C9
-              if (
-                (rowIdx === 2 && (colIdx === 7 || colIdx === 8)) ||
-                (rowIdx === 3 && (colIdx >= 6 && colIdx <= 8))
-              ) {
-                return null;
-              }
-
-              // Merge R1C10 to R2C12 into a single cell
-              if (rowIdx === 0 && colIdx === 9) {
-                return (
-                  <div key={`r1c10-merged`} className="flex items-center justify-center row-span-2 col-span-3 bg-black border border-white border-[1.25px]">
-                  </div>
-                );
-              }
-              // Skip rendering the rest of the merged region for R1C10 to R2C12
-              if (
-                (rowIdx === 0 && (colIdx === 10 || colIdx === 11)) ||
-                (rowIdx === 1 && (colIdx >= 9 && colIdx <= 11))
-              ) {
-                return null;
-              }
-
-              // Merge R3C4 to R4C6 into a single cell
-              if (rowIdx === 2 && colIdx === 3) {
-                return (
-                  <div key={`r3c4-merged`} className="flex flex-col items-start justify-center row-span-2 col-span-3 bg-black border-[1.25px] border-[#D00403] p-2">
-                    <ul className="space-y-3">
-                      <li className="flex items-center text-[#D00403] text-lg font-medium">
-                        <span className="mr-2">[</span>
-                        <FaWeixin className="inline-block" />
-                        <span className="ml-1 mr-2">]</span>
-                        <span>微信</span>
-                      </li>
-                      <li className="flex items-center text-[#D00403] text-lg font-medium">
-                        <span className="mr-2">[</span>
-                        <AiFillWeiboSquare className="inline-block" />
-                        <span className="ml-1 mr-2">]</span>
-                        <span>微博</span>
-                      </li>
-                      <li className="flex items-center text-[#D00403] text-lg font-medium">
-                        <span className="mr-2">[</span>
-                        <AiFillBilibili className="inline-block" />
-                        <span className="ml-1 mr-2">]</span>
-                        <span>哔哩哔哩</span>
-                      </li>
-                      <li className="flex items-center text-[#D00403] text-lg font-medium">
-                        <span className="mr-2">[</span>
-                        <AiFillTikTok className="inline-block" />
-                        <span className="ml-1 mr-2">]</span>
-                        <span>抖音</span>
-                      </li>
-                      <li className="flex items-center text-[#D00403] text-lg font-medium">
-                        <span className="mr-2">[</span>
-                        <AiOutlineAlipayCircle className="inline-block" />
-                        <span className="ml-1 mr-2">]</span>
-                        <span>支付宝</span>
-                      </li>
-                    </ul>
-                  </div>
-                );
-              }
-              // Skip rendering the rest of the merged region for R3C4 to R4C6
-              if (
-                (rowIdx === 2 && (colIdx === 4 || colIdx === 5)) ||
-                (rowIdx === 3 && (colIdx >= 3 && colIdx <= 5))
-              ) {
-                return null;
-              }
-
-              // R1C1 to R1C6 cells with top border
-              if (rowIdx === 0 && colIdx < 6) {
-                return (
-                  <div key={`r${rowIdx + 1}c${colIdx + 1}`} className="flex items-center justify-center bg-black border-t border-white">
-                  </div>
-                );
-              }
-
-              return (
-                <div key={`r${rowIdx + 1}c${colIdx + 1}`} className={cellClass}>
-                </div>
-              );
-            })
-          ))}
+        <div className="footer w-full bg-black text-white">
+          <div className="grid grid-cols-12" style={{ gridTemplateRows: '2fr 0.7fr 2fr 0.7fr 1fr', height: '36rem', width: '100%' }}>
+            {footerCells.map((cell) => (
+              <div
+                key={cell.key}
+                className={[
+                  `row-start-${cell.row}`,
+                  `col-start-${cell.col}`,
+                  cell.rowSpan ? `row-span-${cell.rowSpan}` : '',
+                  cell.colSpan ? `col-span-${cell.colSpan}` : '',
+                  cell.className,
+                ].join(' ')}
+              >
+                {cell.content}
+              </div>
+            ))}
+          </div>
         </div>
+        <div className="pb-4 bg-black"></div>
       </div>
-      <div className="pb-4 bg-black"></div>
-    </div>
   );
 }
