@@ -41,24 +41,13 @@ const NavItem = ({
   showArrow?: boolean;
   onClick?: () => void;
 }) => {
-  const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
-    (e.target as HTMLElement).style.backgroundColor = BRAND_COLOR;
-  };
-  
-  const handleMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
-    (e.target as HTMLElement).style.backgroundColor = 'transparent';
-  };
-
   return (
     <div className={`cursor-pointer flex items-center ${className}`} style={{ fontFamily: FONT_FAMILY }} onClick={onClick}>
-      <a 
+      <a
         href={item.link}
         target={isHome ? undefined : "_blank"}
         rel={isHome ? undefined : "noopener noreferrer"}
-        className={`text-white hover:text-black px-1 sm:px-2 py-1 transition-colors ${textSize}`}
-        style={{ transition: 'all 0.2s ease' }}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        className={`text-white hover:text-black hover:bg-[#D00403] px-1 sm:px-2 py-1 transition-colors duration-200 ${textSize}`}
       >
         {isHome && <span>[ ● ] </span>}
         {item.text}
@@ -111,15 +100,8 @@ const LanguageDropdown = ({
         style={{ fontFamily: FONT_FAMILY }} 
         onClick={onToggle}
       >
-        <span 
-          className={`text-white hover:text-black px-1 sm:px-2 py-1 transition-colors ${isMobile ? 'text-xs' : 'text-xs sm:text-sm'} flex items-center`}
-          style={{ transition: 'all 0.2s ease' }}
-          onMouseEnter={(e) => {
-            (e.target as HTMLElement).style.backgroundColor = BRAND_COLOR;
-          }}
-          onMouseLeave={(e) => {
-            (e.target as HTMLElement).style.backgroundColor = 'transparent';
-          }}
+        <span
+          className={`text-white hover:text-black hover:bg-[#D00403] px-1 sm:px-2 py-1 transition-colors duration-200 ${isMobile ? 'text-xs' : 'text-xs sm:text-sm'} flex items-center`}
         >
           中文 [ {isOpen ? <SlArrowUp className="mx-1" /> : <SlArrowDown className="mx-1" />} ]
         </span>
@@ -133,8 +115,7 @@ const LanguageDropdown = ({
           {displayLanguages.map((language, index) => (
             <div
               key={index}
-              className={`${isMobile ? 'px-3 py-2' : 'px-4 py-2'} cursor-pointer transition-colors border-b border-white last:border-b-0 relative`}
-              style={{ transition: 'all 0.2s ease' }}
+              className={`${isMobile ? 'px-3 py-2' : 'px-4 py-2'} cursor-pointer transition-colors duration-200 border-b border-white last:border-b-0 relative`}
               onMouseEnter={(e) => handleLanguageHover(e, true, language)}
               onMouseLeave={(e) => handleLanguageHover(e, false, language)}
               onClick={() => handleLanguageClick(language)}
@@ -163,21 +144,6 @@ export default function Home() {
 
   const toggleLanguageDropdown = () => setIsLanguageDropdownOpen(!isLanguageDropdownOpen);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-
-  const handleJoinUsHover = (e: React.MouseEvent<HTMLElement>, isEnter: boolean) => {
-    const element = e.currentTarget as HTMLElement;
-    if (isEnter) {
-      element.style.backgroundColor = 'black';
-      element.style.color = BRAND_COLOR;
-      element.style.borderColor = BRAND_COLOR;
-      element.style.borderWidth = '2px';
-    } else {
-      element.style.backgroundColor = BRAND_COLOR;
-      element.style.color = 'black';
-      element.style.borderColor = BRAND_COLOR;
-      element.style.borderWidth = '3px';
-    }
-  };
 
   return (
     <div className="flex flex-col">
@@ -271,8 +237,7 @@ export default function Home() {
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block px-4 py-3 cursor-pointer transition-colors border-b border-white last:border-b-0"
-                    style={{ transition: 'all 0.2s ease' }}
+                    className="block px-4 py-3 cursor-pointer transition-colors duration-200 border-b border-white last:border-b-0"
                     onMouseEnter={(e) => {
                       const element = e.target as HTMLElement;
                       element.style.backgroundColor = BRAND_COLOR;
@@ -293,18 +258,9 @@ export default function Home() {
           </div>
           
           {/* Join Us Button */}
-          <div 
-            className="px-3 sm:px-4 lg:px-6 cursor-pointer flex items-center justify-center text-xs sm:text-sm font-bold text-black transition-colors w-40 sm:w-48 lg:w-56"
-            style={{ 
-              fontFamily: FONT_FAMILY,
-              backgroundColor: BRAND_COLOR,
-              border: `3px solid ${BRAND_COLOR}`,
-              alignSelf: 'stretch',
-              transition: 'all 0.2s ease',
-              boxSizing: 'border-box'
-            }}
-            onMouseEnter={(e) => handleJoinUsHover(e, true)}
-            onMouseLeave={(e) => handleJoinUsHover(e, false)}
+          <div
+            className="px-3 sm:px-4 lg:px-6 cursor-pointer flex items-center justify-center text-xs sm:text-sm font-bold text-black transition-all duration-200 w-40 sm:w-48 lg:w-56 bg-[#D00403] border-[#D00403] border-[3px] self-stretch hover:bg-black hover:text-[#D00403] hover:border-[2px]"
+            style={{ fontFamily: FONT_FAMILY }}
             onClick={() => window.open('http://www.csrc.gov.cn/csrc/index.shtml', '_blank')}
           >
             转入官网<span className="ml-2">[ ↗ ]</span>
