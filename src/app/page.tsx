@@ -1,203 +1,47 @@
-'use client';
-
 import { FaWeixin } from 'react-icons/fa';
 import { AiFillWeiboSquare, AiFillBilibili, AiFillTikTok, AiOutlineAlipayCircle } from 'react-icons/ai';
-import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
 import { FaDoorOpen } from 'react-icons/fa6';
-import { useState } from 'react';
 import Image from 'next/image';
-
-// Constants
-const NAV_ITEMS = [
-  { text: '首页', link: 'http://www.csrc.gov.cn/csrc/index.shtml' },
-  { text: '机构概况', link: 'http://www.csrc.gov.cn/csrc/jggk/index.shtml' },
-  { text: '新闻发布', link: 'http://www.csrc.gov.cn/csrc/xwfb/index.shtml' },
-  { text: '政务信息', link: 'http://www.csrc.gov.cn/csrc/zwxx/index.shtml' },
-  { text: '办事服务', link: 'http://www.csrc.gov.cn/csrc/bsfw/index.shtml' },
-  { text: '互动交流', link: 'http://www.csrc.gov.cn/csrc/hdjl/index.shtml' },
-  { text: '统计信息', link: 'http://www.csrc.gov.cn/csrc/tjsj/index.shtml' },
-  { text: '专题专栏', link: 'http://www.csrc.gov.cn/csrc/ztzl/index.shtml' }
-];
-const LANGUAGES = [
-  'ENGLISH', '繁體中文', 'PORTUGUÊS (BRASIL)', 'POLSKI', '한국어', '日本語',
-  'ITALIANO', 'FRANÇAIS', 'ESPAÑOL (MÉXICO)', 'ESPAÑOL', 'DEUTSCH', 'РУССКИЙ'
-];
-const BRAND_COLOR = '#D00403';
-const FONT_FAMILY = 'Helvetica, Arial, sans-serif';
+import LanguageDropdown from './components/LanguageDropdown';
+import MobileMenu from './components/MobileMenu';
+import JoinUsButton from './components/JoinUsButton';
+import DisclaimerBanner from './components/DisclaimerBanner';
+import { NAV_ITEMS, BRAND_COLOR, FONT_FAMILY } from './constants';
 
 // Reusable components
-const NavItem = ({ 
-  item, 
-  isHome = false, 
-  className = '', 
+const NavItem = ({
+  item,
+  isHome = false,
+  className = '',
   textSize = 'text-xs sm:text-sm',
   showArrow = true,
-  onClick
 }: {
   item: { text: string; link: string };
   isHome?: boolean;
   className?: string;
   textSize?: string;
   showArrow?: boolean;
-  onClick?: () => void;
-}) => {
-  const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
-    (e.target as HTMLElement).style.backgroundColor = BRAND_COLOR;
-  };
-  
-  const handleMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
-    (e.target as HTMLElement).style.backgroundColor = 'transparent';
-  };
+}) => (
+  <div className={`cursor-pointer flex items-center ${className}`} style={{ fontFamily: FONT_FAMILY }}>
+    <a
+      href={item.link}
+      target={isHome ? undefined : "_blank"}
+      rel={isHome ? undefined : "noopener noreferrer"}
+      className={`text-white hover:text-black px-1 sm:px-2 py-1 transition-colors ${textSize} hover:bg-[#D00403]`}
+      style={{ transition: 'all 0.2s ease' }}
+    >
+      {isHome && <span>[ ● ] </span>}
+      {item.text}
+      {!isHome && showArrow && <span className="ml-1 sm:ml-2">[ ↗ ]</span>}
+    </a>
+  </div>
+);
 
-  return (
-    <div className={`cursor-pointer flex items-center ${className}`} style={{ fontFamily: FONT_FAMILY }} onClick={onClick}>
-      <a 
-        href={item.link}
-        target={isHome ? undefined : "_blank"}
-        rel={isHome ? undefined : "noopener noreferrer"}
-        className={`text-white hover:text-black px-1 sm:px-2 py-1 transition-colors ${textSize}`}
-        style={{ transition: 'all 0.2s ease' }}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        {isHome && <span>[ ● ] </span>}
-        {item.text}
-        {!isHome && showArrow && <span className="ml-1 sm:ml-2">[ ↗ ]</span>}
-      </a>
-    </div>
-  );
-};
-
-const LanguageDropdown = ({ 
-  isOpen, 
-  onToggle, 
-  isMobile = false 
-}: {
-  isOpen: boolean;
-  onToggle: () => void;
-  isMobile?: boolean;
-}) => {
-  const [hoveredLanguage, setHoveredLanguage] = useState<string | null>(null);
-
-  const handleLanguageHover = (e: React.MouseEvent<HTMLElement>, isEnter: boolean, language: string) => {
-    const element = e.target as HTMLElement;
-    if (isEnter) {
-      element.style.color = BRAND_COLOR;
-      element.style.borderBottomColor = BRAND_COLOR;
-      if (language !== 'ENGLISH') {
-        setHoveredLanguage(language);
-      }
-    } else {
-      element.style.color = 'white';
-      element.style.borderBottomColor = 'white';
-      setHoveredLanguage(null);
-    }
-  };
-
-  const displayLanguages = isMobile ? LANGUAGES.slice(0, 6) : LANGUAGES;
-  const dropdownClasses = isMobile ? 'absolute right-0 min-w-32 text-xs' : 'absolute left-0 min-w-48 text-sm';
-
-  const handleLanguageClick = (language: string) => {
-    if (language === 'ENGLISH') {
-      window.open('http://www.csrc.gov.cn/csrc_en/index.shtml', '_blank');
-    }
-    onToggle();
-  };
-
-  return (
-    <div className="relative">
-      <div 
-        className={`cursor-pointer flex items-center px-1 ${isMobile ? '' : 'sm:px-2 lg:px-3'} py-4`} 
-        style={{ fontFamily: FONT_FAMILY }} 
-        onClick={onToggle}
-      >
-        <span 
-          className={`text-white hover:text-black px-1 sm:px-2 py-1 transition-colors ${isMobile ? 'text-xs' : 'text-xs sm:text-sm'} flex items-center`}
-          style={{ transition: 'all 0.2s ease' }}
-          onMouseEnter={(e) => {
-            (e.target as HTMLElement).style.backgroundColor = BRAND_COLOR;
-          }}
-          onMouseLeave={(e) => {
-            (e.target as HTMLElement).style.backgroundColor = 'transparent';
-          }}
-        >
-          中文 [ {isOpen ? <SlArrowUp className="mx-1" /> : <SlArrowDown className="mx-1" />} ]
-        </span>
-      </div>
-      
-      {isOpen && (
-        <div 
-          className={`${dropdownClasses} bg-black border-t border-white text-white z-50`}
-          style={{ fontFamily: FONT_FAMILY, top: '100%' }}
-        >
-          {displayLanguages.map((language, index) => (
-            <div
-              key={index}
-              className={`${isMobile ? 'px-3 py-2' : 'px-4 py-2'} cursor-pointer transition-colors border-b border-white last:border-b-0 relative`}
-              style={{ transition: 'all 0.2s ease' }}
-              onMouseEnter={(e) => handleLanguageHover(e, true, language)}
-              onMouseLeave={(e) => handleLanguageHover(e, false, language)}
-              onClick={() => handleLanguageClick(language)}
-            >
-              {language}
-              {hoveredLanguage === language && language !== 'ENGLISH' && (
-                <div 
-                  className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-black text-white px-3 py-1 text-xs whitespace-nowrap border border-white"
-                  style={{ fontFamily: FONT_FAMILY }}
-                >
-                  暂不支持此语言
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
 
 export default function Home() {
-  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showDisclaimer, setShowDisclaimer] = useState(true);
-
-  const toggleLanguageDropdown = () => setIsLanguageDropdownOpen(!isLanguageDropdownOpen);
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-
-  const handleJoinUsHover = (e: React.MouseEvent<HTMLElement>, isEnter: boolean) => {
-    const element = e.currentTarget as HTMLElement;
-    if (isEnter) {
-      element.style.backgroundColor = 'black';
-      element.style.color = BRAND_COLOR;
-      element.style.borderColor = BRAND_COLOR;
-      element.style.borderWidth = '2px';
-    } else {
-      element.style.backgroundColor = BRAND_COLOR;
-      element.style.color = 'black';
-      element.style.borderColor = BRAND_COLOR;
-      element.style.borderWidth = '3px';
-    }
-  };
-
   return (
     <div className="flex flex-col">
-      {/* Disclaimer Banner */}
-      {showDisclaimer && (
-        <div className="fixed top-0 left-0 right-0 bg-black/95 text-white z-[100] p-4 border-b border-[#D00403]">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex-1 text-sm sm:text-base">
-              <p className="font-bold mb-1">免责声明</p>
-              <p>本网站为个人设计作品展示，与中国证券监督管理委员会（以下简称证监会）无任何关联。本网站所展示的内容、设计元素及标识仅用于展示目的，不代表证监会的官方立场或观点。本网站不提供任何证券监管、投资建议或金融服务。未经本人授权，任何人不得使用本网站内容进行商业用途或误导公众。</p>
-            </div>
-            <button 
-              onClick={() => setShowDisclaimer(false)}
-              className="ml-4 px-4 py-2 text-sm border border-white hover:bg-white hover:text-black transition-colors"
-            >
-              关闭
-            </button>
-          </div>
-        </div>
-      )}
+      <DisclaimerBanner />
 
       {/* Navigation Bar */}
       <nav className="flex relative sticky top-0 z-50">
@@ -220,95 +64,22 @@ export default function Home() {
             {/* Desktop Navigation */}
             <div className="hidden lg:flex flex-1">
               {NAV_ITEMS.map((item, index) => (
-                <NavItem 
+                <NavItem
                   key={index}
                   item={item}
                   isHome={item.text === '首页'}
                   className="px-1 sm:px-2 lg:px-3 py-4"
                 />
               ))}
-              <LanguageDropdown 
-                isOpen={isLanguageDropdownOpen}
-                onToggle={toggleLanguageDropdown}
-              />
+              <LanguageDropdown />
             </div>
 
             {/* Mobile Navigation */}
-            <div className="flex lg:hidden flex-1">
-              {NAV_ITEMS.slice(0, 2).map((item, index) => (
-                <NavItem 
-                  key={index}
-                  item={item}
-                  isHome={item.text === '首页'}
-                  className="px-1 py-4"
-                  textSize="text-xs"
-                />
-              ))}
-              
-              <LanguageDropdown 
-                isOpen={isLanguageDropdownOpen}
-                onToggle={toggleLanguageDropdown}
-                isMobile={true}
-              />
-              
-              <NavItem 
-                item={{ text: `更多 [ ${isMobileMenuOpen ? '↑' : '↓'} ]`, link: '#' }}
-                className="px-1 py-4"
-                textSize="text-xs"
-                onClick={toggleMobileMenu}
-              />
-            </div>
-            
-            {/* Mobile Dropdown Menu */}
-            {isMobileMenuOpen && (
-              <div 
-                className="absolute left-0 bg-black border-t border-white text-white z-50 w-full lg:hidden"
-                style={{ fontFamily: FONT_FAMILY, top: '100%' }}
-              >
-                {NAV_ITEMS.slice(2).map((item, index) => (
-                  <a
-                    key={index}
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block px-4 py-3 cursor-pointer transition-colors border-b border-white last:border-b-0"
-                    style={{ transition: 'all 0.2s ease' }}
-                    onMouseEnter={(e) => {
-                      const element = e.target as HTMLElement;
-                      element.style.backgroundColor = BRAND_COLOR;
-                      element.style.color = 'black';
-                    }}
-                    onMouseLeave={(e) => {
-                      const element = e.target as HTMLElement;
-                      element.style.backgroundColor = 'black';
-                      element.style.color = 'white';
-                    }}
-                    onClick={toggleMobileMenu}
-                  >
-                    {item.text} <span className="ml-2">[ ↗ ]</span>
-                  </a>
-                ))}
-              </div>
-            )}
+            <MobileMenu />
           </div>
-          
+
           {/* Join Us Button */}
-          <div 
-            className="px-3 sm:px-4 lg:px-6 cursor-pointer flex items-center justify-center text-xs sm:text-sm font-bold text-black transition-colors w-40 sm:w-48 lg:w-56"
-            style={{ 
-              fontFamily: FONT_FAMILY,
-              backgroundColor: BRAND_COLOR,
-              border: `3px solid ${BRAND_COLOR}`,
-              alignSelf: 'stretch',
-              transition: 'all 0.2s ease',
-              boxSizing: 'border-box'
-            }}
-            onMouseEnter={(e) => handleJoinUsHover(e, true)}
-            onMouseLeave={(e) => handleJoinUsHover(e, false)}
-            onClick={() => window.open('http://www.csrc.gov.cn/csrc/index.shtml', '_blank')}
-          >
-            转入官网<span className="ml-2">[ ↗ ]</span>
-          </div>
+          <JoinUsButton />
         </div>
       </nav>
 
@@ -403,18 +174,9 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <button 
+              <button
                 className="inline-flex items-center text-sm sm:text-base font-bold text-white hover:text-[#D00403] bg-black border-2 border-black px-4 sm:px-6 py-2 sm:py-3 transition-all duration-200 self-start"
-                style={{ 
-                  fontFamily: '"Noto Sans", Arial, sans-serif',
-                  boxShadow: '0 0 0 0px rgba(208, 4, 3, 0)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 0 20px 8px rgba(208, 4, 3, 0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = '0 0 0 0px rgba(208, 4, 3, 0)';
-                }}
+                style={{ fontFamily: '"Noto Sans", Arial, sans-serif' }}
               >
                 查看全部要闻
                 <span className="ml-2">↗</span>
