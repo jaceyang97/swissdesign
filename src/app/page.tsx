@@ -4,7 +4,7 @@ import { FaWeixin } from 'react-icons/fa';
 import { AiFillWeiboSquare, AiFillBilibili, AiFillTikTok, AiOutlineAlipayCircle } from 'react-icons/ai';
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
 import { FaDoorOpen } from 'react-icons/fa6';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 // Constants
@@ -161,6 +161,26 @@ export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(true);
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      });
+    });
+
+    observer.observe(video);
+    return () => observer.unobserve(video);
+  }, []);
+
   const toggleLanguageDropdown = () => setIsLanguageDropdownOpen(!isLanguageDropdownOpen);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
@@ -315,14 +335,15 @@ export default function Home() {
       {/* Main content area */}
       <div className="video-main-page h-screen flex relative">
         {/* Background Video */}
-        <video 
+        <video
+          ref={videoRef}
           className="absolute inset-0 w-full h-full object-cover z-0"
-          autoPlay 
-          muted 
-          loop 
+          muted
+          loop
           playsInline
-          preload="auto"
+          preload="metadata"
           poster="/section1-video-poster.png"
+          loading="lazy"
         >
           <source src="/frontpage_video.mp4" type="video/mp4" />
         </video>
