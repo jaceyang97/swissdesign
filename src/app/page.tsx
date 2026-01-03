@@ -299,7 +299,6 @@ export default function Home() {
           playsInline
           preload="metadata"
           poster="/section1-video-poster.png"
-          loading="lazy"
         >
           <source src="/frontpage_video.mp4" type="video/mp4" />
         </video>
