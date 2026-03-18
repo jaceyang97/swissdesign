@@ -19,6 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
+      <head>
+        <link rel="preload" href="/section1-video-poster.webp" as="image" type="image/webp" />
+      </head>
       <body className="antialiased">
         {children}
         <Analytics />
